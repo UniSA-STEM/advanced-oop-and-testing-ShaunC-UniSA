@@ -12,7 +12,7 @@ from animal import Animal
 
 
 # Main class
-class AquaticAnimal(Animal):
+class Aquatic(Animal):
     """All aquatic animals share these demo traits"""
     def __init__(self, id, name, species, age, diet, biome, enclosure_size,
                  can_swim=True, water_type="Freshwater"):
@@ -28,7 +28,7 @@ class AquaticAnimal(Animal):
 
 
 # Subclasses
-class Dolphin(AquaticAnimal):
+class Dolphin(Aquatic):
     def __init__(self, id, name, age, diet="Carnivore"):
         super().__init__(id, name, "Dolphin", age, diet, "Aquatic / Marine", "Large",
                          water_type="Saltwater")
@@ -38,7 +38,7 @@ class Dolphin(AquaticAnimal):
     def unique_action(self):
         print(f"{self.name} performs flips and jumps out of water.")
 
-class Seal(AquaticAnimal):
+class Seal(Aquatic):
     def __init__(self, id, name, age, diet="Carnivore"):
         super().__init__(id, name, "Seal", age, diet, "Aquatic / Marine", "Medium")
         self._Animal__cry = "Bark"
@@ -47,7 +47,7 @@ class Seal(AquaticAnimal):
     def unique_action(self):
         print(f"{self.name} dives and claps fins.")
 
-class Shark(AquaticAnimal):
+class Shark(Aquatic):
     def __init__(self, id, name, age, diet="Carnivore"):
         super().__init__(id, name, "Shark", age, diet, "Aquatic / Marine", "Large",
                          water_type="Saltwater")
@@ -57,7 +57,7 @@ class Shark(AquaticAnimal):
     def unique_action(self):
         print(f"{self.name} patrols the tank slowly but constantly.")
 
-class Clownfish(AquaticAnimal):
+class Clownfish(Aquatic):
     def __init__(self, id, name, age, diet="Omnivore"):
         super().__init__(id, name, "Clownfish", age, diet, "Aquatic / Marine", "Small",
                          water_type="Saltwater")
@@ -67,7 +67,7 @@ class Clownfish(AquaticAnimal):
     def unique_action(self):
         print(f"{self.name} darts in and out of coral.")
 
-class Seahorse(AquaticAnimal):
+class Seahorse(Aquatic):
     def __init__(self, id, name, age, diet="Carnivore"):
         super().__init__(id, name, "Seahorse", age, diet, "Aquatic / Marine", "Small",
                          water_type="Saltwater")
@@ -77,7 +77,7 @@ class Seahorse(AquaticAnimal):
     def unique_action(self):
         print(f"{self.name} swims upright using dorsal fin.")
 
-class SeaTurtle(AquaticAnimal):
+class SeaTurtle(Aquatic):
     def __init__(self, id, name, age, diet="Herbivore"):
         super().__init__(id, name, "Sea Turtle", age, diet, "Aquatic / Marine", "Medium",
                          water_type="Saltwater")
@@ -87,7 +87,7 @@ class SeaTurtle(AquaticAnimal):
     def unique_action(self):
         print(f"{self.name} glides smoothly through water.")
 
-class Octopus(AquaticAnimal):
+class Octopus(Aquatic):
     def __init__(self, id, name, age, diet="Carnivore"):
         super().__init__(id, name, "Octopus", age, diet, "Aquatic / Marine", "Medium",
                          water_type="Saltwater")
@@ -97,7 +97,7 @@ class Octopus(AquaticAnimal):
     def unique_action(self):
         print(f"{self.name} uses its tentacles to explore and manipulate objects.")
 
-class Crab(AquaticAnimal):
+class Crab(Aquatic):
     def __init__(self, id, name, age, diet="Omnivore"):
         super().__init__(id, name, "Crab", age, diet, "Aquatic / Marine", "Small",
                          water_type="Saltwater")

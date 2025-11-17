@@ -7,11 +7,6 @@ Username: CANSY012
 This is my own work as defined by the University's Academic Integrity Policy.
 """
 
-# Imports
-from animal import Animal
-
-
-# Main class
 class Mammal(Animal):
     """All mammals have these traits"""
     def __init__(self, id, name, species, age, diet, biome, enclosure_size,
