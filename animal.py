@@ -118,8 +118,7 @@ def add_animal():
         2: ("Bird", birds.Bird),
         3: ("Reptile", reptiles.Reptile),
         4: ("Amphibian", amphibians.Amphibian),
-        5: ("Aquatic", aquatic.AquaticAnimal)
-    }
+        5: ("Aquatic", aquatic.AquaticAnimal)}
 
     print("Select animal type:")
     for key, (name, _) in animal_types.items():

@@ -8,8 +8,8 @@ This is my own work as defined by the University's Academic Integrity Policy.
 """
 
 # Imports
-from animal import animal
-from staff import staff
+from animal import Animal
+from staff import Staff
 
 # Enclosures
 class Enclosure:
@@ -47,6 +47,34 @@ class Enclosure:
     def enclosure_id(self):
         return self.__enclosure_id
 
+    @property
+    def name(self):
+        return self.__enclosure_name
+
+    @name.setter
+    def name(self, value):
+        self.__enclosure_name = value
+
+    @property
+    def size(self):
+        return self.__enclosure_size
+
+    @property
+    def biome(self):
+        return self.__enclosure_biome
+
+    @property
+    def cleanliness(self):
+        return self.__enclosure_cleanliness
+
+    @cleanliness.setter
+    def cleanliness(self, value):
+        self.__enclosure_cleanliness = max(1, min(10, value))
+
+    @property
+    def animals(self):
+        return self.__enclosure_animal
+
     def __str__(self):
         animal_status = "Empty" if not self.__enclosure_animal else type(self.__enclosure_animal[0]).__name__
         return (
@@ -55,13 +83,12 @@ class Enclosure:
             f"Biome: {self.__enclosure_biome} | "
             f"Size: {self.__enclosure_size} | "
             f"Cleanliness: {self.__enclosure_cleanliness} | "
-            f"Animal Type: {animal_status}"
-        )
+            f"Animal Type: {animal_status}")
 
 # EnclosureOps
 def add_enclosure():
     """Adds an enclosure to the Zoo"""
-    print(f"\nAdding new {self.animal_type} enclosure")
+    print(f"\nAdding new enclosure: ")
 
     size_options = {1: "Small", 2: "Medium", 3: "Large"}
 
@@ -86,8 +113,7 @@ def add_enclosure():
         3: "Forest / Temperate",
         4: "Arctic / Polar",
         5: "Desert",
-        6: "Aquatic / Marine"
-    }
+        6: "Aquatic / Marine"}
 
     valid_biome = False
     while not valid_biome:
@@ -110,7 +136,11 @@ def add_enclosure():
     return enclosure
 
 
-def remove_enclosures(enclosure_id):
-    """Removes the enclosure from the list of enclosure_ids."""
-    if self.__enclosure_id in Enclosure.enclosure_ids:
-        Enclosure.enclosure_ids.remove(self.__enclosure_id)
+def remove_enclosure(enclosure_id):
+    """Removes an enclosure from the list of enclosures."""
+    for enclosure in Enclosure.enclosure_list:
+        if enclosure.enclosure_id == enclosure_id:
+            Enclosure.enclosure_list.remove(enclosure)
+            print(f"Enclosure #{enclosure_id} removed.")
+            return
+    print(f"No enclosure found with ID #{enclosure_id}.")
