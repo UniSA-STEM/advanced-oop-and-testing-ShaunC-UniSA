@@ -8,7 +8,6 @@ This is my own work as defined by the University's Academic Integrity Policy.
 """
 
 # Imports
-from animal import Animal
 from enclosure import Enclosure
 
 # Staff
@@ -77,32 +76,51 @@ class Staff:
         return f"Staff #{self.__id} | Name: {full_name} | Role: {self.__role} | Task: {task_status}"
 
 # StaffOps
-def add_staff():
+def add_staff(zoo):
     """Add a staff member to the Zoo."""
+
+    salutations = {1: "Mr.", 2: "Ms.", 3: "Mrs.", 4: "Dr."}
+    valid_salutation = False
+
+    while not valid_salutation:
+        print("\nSelect salutation:\n")
+        print("1. Mr.\n2. Ms.\n3. Mrs.\n4. Dr.")
+
+        try:
+            choice = int(input("\nEnter choice (1–4): "))
+            if choice in salutations:
+                salutation = salutations[choice]
+                valid_salutation = True
+            else:
+                print("Invalid selection. Enter 1–3.")
+        except ValueError:
+            print("Input must be a number (1–3).")
+
     valid_name = False
     while not valid_name:
         firstname = input("Enter first name: ").strip()
         lastname = input("Enter last name: ").strip()
-        salutation = input("Enter salutation (e.g., Mr., Ms., Dr.): ").strip()
-        if firstname and lastname and salutation:
+
+        if firstname and lastname:
             valid_name = True
         else:
-            print("All three fields must be filled: first name, last name, salutation.")
+            print("Both first name and last name must be filled.")
 
     roles = {1: "Zookeeper", 2: "Veterinarian", 3: "Groundskeeper"}
     valid_role = False
+
     while not valid_role:
-        print("\nSelect staff role:")
-        print("1 Zookeeper  2 Veterinarian  3 Groundskeeper")
+        print("\nSelect staff role:\n")
+        print("1. Zookeeper\n2. Veterinarian\n3. Groundskeeper")
         try:
-            choice = int(input("Enter choice (1-3): "))
+            choice = int(input("\nEnter choice (1–3): "))
             if choice in roles:
                 role = roles[choice]
                 valid_role = True
             else:
-                print("Invalid selection. Enter 1, 2, or 3.")
+                print("Invalid selection. Enter 1–3.")
         except ValueError:
-            print("Input must be a number (1-3).")
+            print("Input must be a number (1–3).")
 
     staff_member = Staff(firstname, lastname, salutation, role)
     print("\nStaff member created:")
@@ -110,7 +128,7 @@ def add_staff():
     return staff_member
 
 
-def remove_staff():
+def remove_staff(zoo):
     """Removes a staff member from the Zoo."""
     if not Staff.staff_list:
         print("No staff exist.")
@@ -253,6 +271,7 @@ def move_animals():
     # Move the animal
     source_enclosure.animals.remove(animal_to_move)
     destination_enclosure.animals.append(animal_to_move)
+    animal_to_move.enclosure = destination_enclosure
 
     print(f"\nMoved {type(animal_to_move).__name__} from "
         f"Enclosure #{source_enclosure.enclosure_id} to "

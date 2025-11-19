@@ -1,25 +1,18 @@
 """
 File: animal.py
-Description: Contains the classes, functions, and methods relating to zoo animals.
+Description: Contains the classes, functions, attributes and methods relating to zoo animals.
 Author: Shaun Cantley
 ID: 110450842
 Username: CANSY012
 This is my own work as defined by the University's Academic Integrity Policy.
 """
 
-# Imports
-import mammals
-import birds
-import reptiles
-import amphibians
-import aquatic
-
-# Animals
 class Animal:
     """Represents a zoo animal."""
     zoo_animals = []
 
-    def __init__(self, name: str, species: str, age: int, diet: str, biome: str, enclosure_size: str) -> None:
+    def __init__(self, name: str, species: str, age: int, diet: str,
+                 biome: str, enclosure_size: str, enclosure=None) -> None:
         self.__id = self.get_next_id()
         self.__name = name
         self.__species = species
@@ -34,6 +27,7 @@ class Animal:
         self.__illnesses = None
         self.__behavior = None
         self.__under_treatment = False
+        self.__enclosure = enclosure
 
         Animal.zoo_animals.append(self)
 
@@ -81,6 +75,10 @@ class Animal:
         return self.__enclosure_size
 
     @property
+    def enclosure(self):
+        return self.__enclosure
+
+    @property
     def cry_sound(self):
         return self.__cry
 
@@ -91,6 +89,10 @@ class Animal:
     @property
     def sleep_place(self):
         return self.__sleep
+
+    @enclosure.setter
+    def enclosure(self, enclosure):
+        self.__enclosure = enclosure
 
     # Methods
 
@@ -113,21 +115,28 @@ class Animal:
         print(f"{self.name} does something unique.")
 
     def __str__(self):
-        return (f"{self.name} ({self.species}) - Age: {self.age}, Diet: {self.diet}, "
-                f"Biome: {self.biome}, Enclosure: {self.enclosure_size}")
-
+        enclosure_info = f"{self.enclosure.enclosure_id} - {self.enclosure.name}" if self.enclosure else "None"
+        return (f"ID {self.id}: {self.name} ({self.species}) - Age: {self.age}, Diet: {self.diet}, "
+                f"Biome: {self.biome}, Enclosure: {enclosure_info}")
 
 # AnimalOps
-def add_animal():
+def add_animal(zoo):
     """Adds an animal to the Zoo."""
+
+    import mammals
+    import birds
+    import reptiles
+    import amphibians
+    import aquatic
+
     animal_types = {
         1: ("Mammal", mammals.Mammal),
         2: ("Bird", birds.Bird),
         3: ("Reptile", reptiles.Reptile),
         4: ("Amphibian", amphibians.Amphibian),
-        5: ("Aquatic", aquatic.AquaticAnimal)}
+        5: ("Aquatic", aquatic.Aquatic)}
 
-    print("Select animal type:")
+    print("\n=== Select animal type ===\n")
     for key, (name, _) in animal_types.items():
         print(f"{key}: {name}")
 
@@ -163,11 +172,14 @@ def add_animal():
     # Create animal
     animal_instance = subclass(name=animal_name, age=0)
 
-    print(f"\nAdded {type_name} '{animal_name}' ({subclass.__name__}) with ID {animal_instance.id}")
+    # Add the animal to the zoo
+    zoo.animals.append(animal_instance)
+
+    print(f"\nAdded {type_name} '{animal_name}' ({subclass.__name__}) with animal ID {animal_instance.id}")
     return animal_instance
 
 
-def remove_animal():
+def remove_animal(zoo):
     """Removes an animal from the Zoo"""
     if not Animal.zoo_animals:
         print("No animals exist.")
@@ -184,3 +196,12 @@ def remove_animal():
         print(f"No animal found with ID {animal_id}.")
     except ValueError:
         print("Input must be a number.")
+
+def list_animals(zoo):
+    """Lists all animals and their details."""
+    if not zoo.animals:
+        print("No animals in the zoo.")
+    else:
+        print("\n=== Animals in the zoo ===\n")
+        for animal in zoo.animals:
+            print("-", animal)

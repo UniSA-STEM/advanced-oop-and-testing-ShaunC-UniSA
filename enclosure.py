@@ -7,10 +7,6 @@ Username: CANSY012
 This is my own work as defined by the University's Academic Integrity Policy.
 """
 
-# Imports
-from animal import Animal
-from staff import Staff
-
 # Enclosures
 class Enclosure:
     """Enclosures can hold animals of various types."""
@@ -34,14 +30,6 @@ class Enclosure:
             next_available_id += 1
         return next_available_id
 
-    @classmethod
-    def list_all_enclosures(cls):
-        """Lists all enclosures and their details."""
-        if not cls.enclosure_list:
-            print("No enclosures exist.")
-        else:
-            for enclosure in cls.enclosure_list:
-                print(enclosure)
 
     @property
     def enclosure_id(self):
@@ -86,7 +74,7 @@ class Enclosure:
             f"Animal Type: {animal_status}")
 
 # EnclosureOps
-def add_enclosure():
+def add_enclosure(zoo):
     """Adds an enclosure to the Zoo"""
     print(f"\nAdding new enclosure: ")
 
@@ -144,3 +132,13 @@ def remove_enclosure(enclosure_id):
             print(f"Enclosure #{enclosure_id} removed.")
             return
     print(f"No enclosure found with ID #{enclosure_id}.")
+
+
+def list_enclosures(zoo):
+    """Lists all enclosures and their details."""
+    if not Enclosure.enclosure_list:
+        print("No enclosures in the zoo.")
+    else:
+        print("\n=== Zoo Enclosures ===\n")
+        for enclosure in Enclosure.enclosure_list:
+            print("-", enclosure)

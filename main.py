@@ -8,9 +8,7 @@ This is my own work as defined by the University's Academic Integrity Policy.
 """
 
 # Imports
-from animal import animal
-from enclosure import enclosure
-from staff import staff
+
 
 # Zoo Operations
 def assign_enclosure(animal, enclosure):
