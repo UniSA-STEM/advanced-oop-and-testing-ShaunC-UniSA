@@ -93,6 +93,13 @@ class Animal:
         return self.__sleep
 
     # Methods
+
+    def _set_cry(self, cry):
+        self.__cry = cry
+
+    def _set_sleep(self, sleep):
+        self.__sleep = sleep
+
     def cry(self):
         print(f"{self.name} says {self.cry_sound}.")
 

@@ -14,14 +14,14 @@ from animal import Animal
 # Main class
 class Amphibian(Animal):
     """All amphibians have these traits"""
-    def __init__(self, id, name, species, age, diet, biome, enclosure_size,
+    def __init__(self, name, species, age, diet, biome, enclosure_size,
                  moist_skin=True, cold_blooded=True):
-        super().__init__(id, name, species, age, diet, biome, enclosure_size)
+        super().__init__(name, species, age, diet, biome, enclosure_size)
         self.moist_skin = moist_skin
         self.cold_blooded = cold_blooded
-        self._Animal__cry = "Croak"
+        self._set_cry("Croak")
         self._Animal__food = diet
-        self._Animal__sleep = "hidden in damp areas"
+        self._set_sleep("hidden in damp areas")
 
     def unique_action(self):
         print(f"{self.name} jumps or swims around.")
@@ -29,19 +29,20 @@ class Amphibian(Animal):
 
 # Subclasses
 class TreeFrog(Amphibian):
-    def __init__(self, id, name, age, diet="Insectivore"):
-        super().__init__(id, name, "Tree Frog", age, diet, "Tropical / Rainforest", "Small")
-        self._Animal__cry = "Ribbit"
-        self._Animal__sleep = "on leaves or branches"
+    def __init__(self, name, age, diet="Insectivore"):
+        super().__init__(name, "Tree Frog", age, diet, "Tropical / Rainforest", "Small")
+        self._set_cry("Ribbit")
+        self._set_sleep("on leaves or branches")
 
     def unique_action(self):
         print(f"{self.name} jumps between leaves and branches.")
 
+
 class Toad(Amphibian):
-    def __init__(self, id, name, age, diet="Insectivore"):
-        super().__init__(id, name, "Toad", age, diet, "Forest / Temperate", "Small")
-        self._Animal__cry = "Croak"
-        self._Animal__sleep = "in burrows or under rocks"
+    def __init__(self, name, age, diet="Insectivore"):
+        super().__init__(name, "Toad", age, diet, "Forest / Temperate", "Small")
+        self._set_cry("Croak")
+        self._set_sleep("in burrows or under rocks")
 
     def unique_action(self):
         print(f"{self.name} hops slowly and hides under cover.")
