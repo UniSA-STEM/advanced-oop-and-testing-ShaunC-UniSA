@@ -11,10 +11,10 @@ from animal import Animal
 
 # Main class
 class Aquatic(Animal):
-    """All aquatic animals share these demo traits"""
-    def __init__(self, name, species, age, diet, biome, enclosure_size,
+    """All aquatic animals share these traits"""
+    def __init__(self, name, species, age, diet, biome, enclosure_size, zoo,
                  can_swim=True, water_type="Freshwater"):
-        super().__init__(name, species, age, diet, biome, enclosure_size)
+        super().__init__(name, species, age, diet, biome, enclosure_size, zoo)
         self.can_swim = can_swim
         self.water_type = water_type
         self._set_cry("Blub")
@@ -27,9 +27,9 @@ class Aquatic(Animal):
 
 # Subclasses
 class Dolphin(Aquatic):
-    def __init__(self, name, age, diet="Carnivore"):
+    def __init__(self, name, age, zoo, diet="Carnivore"):
         super().__init__(name, "Dolphin", age, diet, "Aquatic / Marine", "Large",
-                         water_type="Saltwater")
+                         zoo, water_type="Saltwater")
         self._set_cry("Click/Whistle")
         self._set_sleep("half of brain sleeps at a time")
 
@@ -38,8 +38,8 @@ class Dolphin(Aquatic):
 
 
 class Seal(Aquatic):
-    def __init__(self, name, age, diet="Carnivore"):
-        super().__init__(name, "Seal", age, diet, "Aquatic / Marine", "Medium")
+    def __init__(self, name, age, zoo, diet="Carnivore"):
+        super().__init__(name, "Seal", age, diet, "Aquatic / Marine", "Medium", zoo)
         self._set_cry("Bark")
         self._set_sleep("floating or on rocks")
 
@@ -48,9 +48,9 @@ class Seal(Aquatic):
 
 
 class Shark(Aquatic):
-    def __init__(self, name, age, diet="Carnivore"):
+    def __init__(self, name, age, zoo, diet="Carnivore"):
         super().__init__(name, "Shark", age, diet, "Aquatic / Marine", "Large",
-                         water_type="Saltwater")
+                         zoo, water_type="Saltwater")
         self._set_cry("Silent")
         self._set_sleep("semi-active rest")
 
@@ -59,9 +59,9 @@ class Shark(Aquatic):
 
 
 class Clownfish(Aquatic):
-    def __init__(self, name, age, diet="Omnivore"):
+    def __init__(self, name, age, zoo, diet="Omnivore"):
         super().__init__(name, "Clownfish", age, diet, "Aquatic / Marine", "Small",
-                         water_type="Saltwater")
+                         zoo, water_type="Saltwater")
         self._set_cry("Blub")
         self._set_sleep("hidden among anemones")
 
@@ -70,9 +70,9 @@ class Clownfish(Aquatic):
 
 
 class Seahorse(Aquatic):
-    def __init__(self, name, age, diet="Carnivore"):
+    def __init__(self, name, age, zoo, diet="Carnivore"):
         super().__init__(name, "Seahorse", age, diet, "Aquatic / Marine", "Small",
-                         water_type="Saltwater")
+                         zoo, water_type="Saltwater")
         self._set_cry("Silent")
         self._set_sleep("clinging to seaweed")
 
@@ -81,9 +81,9 @@ class Seahorse(Aquatic):
 
 
 class SeaTurtle(Aquatic):
-    def __init__(self, name, age, diet="Herbivore"):
+    def __init__(self, name, age, zoo, diet="Herbivore"):
         super().__init__(name, "Sea Turtle", age, diet, "Aquatic / Marine", "Medium",
-                         water_type="Saltwater")
+                         zoo, water_type="Saltwater")
         self._set_cry("Silent")
         self._set_sleep("floating or resting on seafloor")
 
@@ -92,9 +92,9 @@ class SeaTurtle(Aquatic):
 
 
 class Octopus(Aquatic):
-    def __init__(self, name, age, diet="Carnivore"):
+    def __init__(self, name, age, zoo, diet="Carnivore"):
         super().__init__(name, "Octopus", age, diet, "Aquatic / Marine", "Medium",
-                         water_type="Saltwater")
+                         zoo, water_type="Saltwater")
         self._set_cry("Ink squirt")
         self._set_sleep("hidden in crevices")
 
@@ -103,9 +103,9 @@ class Octopus(Aquatic):
 
 
 class Crab(Aquatic):
-    def __init__(self, name, age, diet="Omnivore"):
+    def __init__(self, name, age, zoo, diet="Omnivore"):
         super().__init__(name, "Crab", age, diet, "Aquatic / Marine", "Small",
-                         water_type="Saltwater")
+                         zoo, water_type="Saltwater")
         self._set_cry("Clack")
         self._set_sleep("in burrows or rocks")
 

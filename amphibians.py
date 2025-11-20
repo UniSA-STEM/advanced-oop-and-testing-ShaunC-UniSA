@@ -9,12 +9,13 @@ This is my own work as defined by the University's Academic Integrity Policy.
 
 from animal import Animal
 
+
 # Main class
 class Amphibian(Animal):
     """All amphibians have these traits"""
-    def __init__(self, name, species, age, diet, biome, enclosure_size,
+    def __init__(self, name, species, age, diet, biome, enclosure_size, zoo,
                  moist_skin=True, cold_blooded=True):
-        super().__init__(name, species, age, diet, biome, enclosure_size)
+        super().__init__(name, species, age, diet, biome, enclosure_size, zoo)
         self.moist_skin = moist_skin
         self.cold_blooded = cold_blooded
         self._set_cry("Croak")
@@ -27,8 +28,8 @@ class Amphibian(Animal):
 
 # Subclasses
 class TreeFrog(Amphibian):
-    def __init__(self, name, age, diet="Insectivore"):
-        super().__init__(name, "Tree Frog", age, diet, "Tropical / Rainforest", "Small")
+    def __init__(self, name, age, zoo, diet="Insectivore"):
+        super().__init__(name, "Tree Frog", age, diet, "Tropical / Rainforest", "Small", zoo)
         self._set_cry("Ribbit")
         self._set_sleep("on leaves or branches")
 
@@ -37,8 +38,8 @@ class TreeFrog(Amphibian):
 
 
 class Toad(Amphibian):
-    def __init__(self, name, age, diet="Insectivore"):
-        super().__init__(name, "Toad", age, diet, "Forest / Temperate", "Small")
+    def __init__(self, name, age, zoo, diet="Insectivore"):
+        super().__init__(name, "Toad", age, diet, "Forest / Temperate", "Small", zoo)
         self._set_cry("Croak")
         self._set_sleep("in burrows or under rocks")
 

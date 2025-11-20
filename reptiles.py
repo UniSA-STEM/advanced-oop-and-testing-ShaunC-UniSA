@@ -12,9 +12,9 @@ from animal import Animal
 # Main Class
 class Reptile(Animal):
     """All reptiles have these traits"""
-    def __init__(self, name, species, age, diet, biome, enclosure_size,
+    def __init__(self, name, species, age, diet, biome, enclosure_size, zoo,
                  cold_blooded=True, scales=True):
-        super().__init__(name, species, age, diet, biome, enclosure_size)
+        super().__init__(name, species, age, diet, biome, enclosure_size, zoo)
         self.cold_blooded = cold_blooded
         self.scales = scales
         self._set_cry("Hiss")
@@ -27,8 +27,8 @@ class Reptile(Animal):
 
 # Subclasses
 class Python(Reptile):
-    def __init__(self, name, age, diet="Carnivore"):
-        super().__init__(name, "Python", age, diet, "Tropical / Rainforest", "Medium")
+    def __init__(self, name, age, zoo, diet="Carnivore"):
+        super().__init__(name, "Python", age, diet, "Tropical / Rainforest", "Medium", zoo)
         self._set_cry("Hiss")
         self._set_sleep("coiled in a hidden spot")
 
@@ -37,8 +37,8 @@ class Python(Reptile):
 
 
 class Iguana(Reptile):
-    def __init__(self, name, age, diet="Herbivore"):
-        super().__init__(name, "Iguana", age, diet, "Tropical / Rainforest", "Small")
+    def __init__(self, name, age, zoo, diet="Herbivore"):
+        super().__init__(name, "Iguana", age, diet, "Tropical / Rainforest", "Small", zoo)
         self._set_cry("Hiss")
         self._set_sleep("on tree branches")
 
@@ -47,8 +47,8 @@ class Iguana(Reptile):
 
 
 class MonitorLizard(Reptile):
-    def __init__(self, name, age, diet="Carnivore"):
-        super().__init__(name, "Monitor Lizard", age, diet, "Desert", "Medium")
+    def __init__(self, name, age, zoo, diet="Carnivore"):
+        super().__init__(name, "Monitor Lizard", age, diet, "Desert", "Medium", zoo)
         self._set_cry("Hiss")
         self._set_sleep("in burrows or shade")
 
@@ -57,8 +57,8 @@ class MonitorLizard(Reptile):
 
 
 class Rattlesnake(Reptile):
-    def __init__(self, name, age, diet="Carnivore"):
-        super().__init__(name, "Rattlesnake", age, diet, "Desert", "Small")
+    def __init__(self, name, age, zoo, diet="Carnivore"):
+        super().__init__(name, "Rattlesnake", age, diet, "Desert", "Small", zoo)
         self._set_cry("Rattle")
         self._set_sleep("hidden in sand or rocks")
 
@@ -67,8 +67,8 @@ class Rattlesnake(Reptile):
 
 
 class Tortoise(Reptile):
-    def __init__(self, name, age, diet="Herbivore"):
-        super().__init__(name, "Tortoise", age, diet, "Desert", "Medium")
+    def __init__(self, name, age, zoo, diet="Herbivore"):
+        super().__init__(name, "Tortoise", age, diet, "Desert", "Medium", zoo)
         self._set_cry("Silent")
         self._set_sleep("in shell or under rocks")
 
@@ -77,8 +77,8 @@ class Tortoise(Reptile):
 
 
 class SeaTurtle(Reptile):
-    def __init__(self, name, age, diet="Herbivore"):
-        super().__init__(name, "Sea Turtle", age, diet, "Aquatic / Marine", "Medium")
+    def __init__(self, name, age, zoo, diet="Herbivore"):
+        super().__init__(name, "Sea Turtle", age, diet, "Aquatic / Marine", "Medium", zoo)
         self._set_cry("Silent")
         self._set_sleep("floating or resting underwater")
 

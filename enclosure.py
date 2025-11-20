@@ -12,7 +12,7 @@ class Enclosure:
     """Enclosures can hold animals of various types."""
     enclosure_list = []
 
-    def __init__(self, size=str, biome=str):
+    def __init__(self, size=str, biome=str, zoo=None):
         self.__enclosure_id = self.get_next_id()
         self.__enclosure_name = "Empty Enclosure"
         self.__enclosure_size = size
@@ -20,7 +20,8 @@ class Enclosure:
         self.__enclosure_cleanliness = 10
         self.__enclosure_animal = []
 
-        Enclosure.enclosure_list.append(self)
+        if zoo:
+            zoo.enclosures.append(self)
 
     @classmethod
     def get_next_id(cls):
@@ -76,10 +77,9 @@ class Enclosure:
 # EnclosureOps
 def add_enclosure(zoo):
     """Adds an enclosure to the Zoo"""
-    print(f"\nAdding new enclosure: ")
+    print("\nAdding new enclosure:")
 
     size_options = {1: "Small", 2: "Medium", 3: "Large"}
-
     valid_size = False
     while not valid_size:
         try:
@@ -101,34 +101,39 @@ def add_enclosure(zoo):
         3: "Forest / Temperate",
         4: "Arctic / Polar",
         5: "Desert",
-        6: "Aquatic / Marine"}
+        6: "Aquatic / Marine",
+        7: "Quarantine"}
 
     valid_biome = False
     while not valid_biome:
         try:
             print("\nSelect Biome:")
-            print("1 Savannah / Grassland  2 Tropical / Rainforest  3 Forest / Temperate")
-            print("4 Arctic / Polar  5 Desert  6 Aquatic / Marine")
-            choice = int(input("Enter choice (1-6): "))
+            for key, val in biome_options.items():
+                print(f"{key}. {val}")
+            choice = int(input("Enter choice (1-7): "))
             if choice in biome_options:
                 biome = biome_options[choice]
                 valid_biome = True
             else:
-                print(f"Invalid selection. Enter a number between 1 and 6.")
+                print("Invalid selection. Enter a number between 1 and 7.")
         except ValueError:
             print("Input must be a number.")
 
-    enclosure = Enclosure(enclosure_size, biome)
+    name_input = input("\nEnter Enclosure Name (press Enter for 'Empty Enclosure'): ").strip()
+    enclosure_name = name_input if name_input else "Empty Enclosure"
+
+    enclosure = Enclosure(enclosure_size, biome, zoo)
+    enclosure.name = enclosure_name
     print("\nEnclosure created:")
     print(enclosure)
     return enclosure
 
 
-def remove_enclosure(enclosure_id):
+def remove_enclosure(zoo, enclosure_id):
     """Removes an enclosure from the list of enclosures."""
-    for enclosure in Enclosure.enclosure_list:
+    for enclosure in zoo.enclosures:
         if enclosure.enclosure_id == enclosure_id:
-            Enclosure.enclosure_list.remove(enclosure)
+            zoo.enclosures.remove(enclosure)
             print(f"Enclosure #{enclosure_id} removed.")
             return
     print(f"No enclosure found with ID #{enclosure_id}.")
@@ -136,9 +141,9 @@ def remove_enclosure(enclosure_id):
 
 def list_enclosures(zoo):
     """Lists all enclosures and their details."""
-    if not Enclosure.enclosure_list:
+    if not zoo.enclosures:
         print("No enclosures in the zoo.")
     else:
         print("\n=== Zoo Enclosures ===\n")
-        for enclosure in Enclosure.enclosure_list:
+        for enclosure in zoo.enclosures:
             print("-", enclosure)

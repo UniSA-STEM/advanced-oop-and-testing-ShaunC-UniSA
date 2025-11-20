@@ -11,13 +11,12 @@ from animal import Animal
 
 class Mammal(Animal):
     """All mammals have these traits"""
-    def __init__(self, name, species, age, diet, biome, enclosure_size,
+    def __init__(self, name, species, age, diet, biome, enclosure_size, zoo,
                  nocturnal=False, aggressiveness=5):
-        super().__init__(name, species, age, diet, biome, enclosure_size)
+        super().__init__(name, species, age, diet, biome, enclosure_size, zoo)
         self.nocturnal = nocturnal
         self.aggressiveness = aggressiveness
         self._set_cry("Growl")
-        self._Animal__food = diet
         self._set_sleep("in den")
 
     def unique_action(self):
@@ -26,9 +25,9 @@ class Mammal(Animal):
 
 # Subclasses
 class Lion(Mammal):
-    def __init__(self, name, age, diet="Carnivore"):
+    def __init__(self, name, age, zoo, diet="Carnivore"):
         super().__init__(name, "Lion", age, diet, "Savannah / Grassland", "Large",
-                         nocturnal=False, aggressiveness=8)
+                         zoo, nocturnal=False, aggressiveness=8)
         self._set_cry("Roar")
         self._set_sleep("in the shade")
 
@@ -37,9 +36,9 @@ class Lion(Mammal):
 
 
 class Elephant(Mammal):
-    def __init__(self, name, age, diet="Herbivore"):
+    def __init__(self, name, age, zoo, diet="Herbivore"):
         super().__init__(name, "Elephant", age, diet, "Savannah / Grassland", "Large",
-                         nocturnal=False, aggressiveness=3)
+                         zoo, nocturnal=False, aggressiveness=3)
         self._set_cry("Trumpet")
         self._set_sleep("standing up")
 
@@ -48,9 +47,9 @@ class Elephant(Mammal):
 
 
 class Giraffe(Mammal):
-    def __init__(self, name, age, diet="Herbivore"):
+    def __init__(self, name, age, zoo, diet="Herbivore"):
         super().__init__(name, "Giraffe", age, diet, "Savannah / Grassland", "Large",
-                         nocturnal=False, aggressiveness=2)
+                         zoo, nocturnal=False, aggressiveness=2)
         self._set_cry("Bleat")
         self._set_sleep("lying down")
 
@@ -59,9 +58,9 @@ class Giraffe(Mammal):
 
 
 class Zebra(Mammal):
-    def __init__(self, name, age, diet="Herbivore"):
+    def __init__(self, name, age, zoo, diet="Herbivore"):
         super().__init__(name, "Zebra", age, diet, "Savannah / Grassland", "Medium",
-                         nocturnal=False, aggressiveness=4)
+                         zoo, nocturnal=False, aggressiveness=4)
         self._set_cry("Whinny")
         self._set_sleep("standing up")
 
@@ -70,9 +69,9 @@ class Zebra(Mammal):
 
 
 class Meerkat(Mammal):
-    def __init__(self, name, age, diet="Omnivore"):
+    def __init__(self, name, age, zoo, diet="Omnivore"):
         super().__init__(name, "Meerkat", age, diet, "Savannah / Grassland", "Small",
-                         nocturnal=True, aggressiveness=4)
+                         zoo, nocturnal=True, aggressiveness=4)
         self._set_cry("Chirp")
         self._set_sleep("in burrow")
 
@@ -81,9 +80,9 @@ class Meerkat(Mammal):
 
 
 class Hyena(Mammal):
-    def __init__(self, name, age, diet="Carnivore"):
+    def __init__(self, name, age, zoo, diet="Carnivore"):
         super().__init__(name, "Hyena", age, diet, "Savannah / Grassland", "Medium",
-                         nocturnal=True, aggressiveness=7)
+                         zoo, nocturnal=True, aggressiveness=7)
         self._set_cry("Laugh")
         self._set_sleep("in dens")
 
@@ -92,9 +91,9 @@ class Hyena(Mammal):
 
 
 class Chimpanzee(Mammal):
-    def __init__(self, name, age, diet="Omnivore"):
+    def __init__(self, name, age, zoo, diet="Omnivore"):
         super().__init__(name, "Chimpanzee", age, diet, "Tropical / Rainforest", "Medium",
-                         nocturnal=False, aggressiveness=5)
+                         zoo, nocturnal=False, aggressiveness=5)
         self._set_cry("Hoo-ha")
         self._set_sleep("in trees")
 
@@ -103,9 +102,9 @@ class Chimpanzee(Mammal):
 
 
 class Tiger(Mammal):
-    def __init__(self, name, age, diet="Carnivore"):
+    def __init__(self, name, age, zoo, diet="Carnivore"):
         super().__init__(name, "Tiger", age, diet, "Tropical / Rainforest", "Large",
-                         nocturnal=True, aggressiveness=9)
+                         zoo, nocturnal=True, aggressiveness=9)
         self._set_cry("Growl")
         self._set_sleep("in a shaded den")
 
@@ -114,9 +113,9 @@ class Tiger(Mammal):
 
 
 class Sloth(Mammal):
-    def __init__(self, name, age, diet="Herbivore"):
+    def __init__(self, name, age, zoo, diet="Herbivore"):
         super().__init__(name, "Sloth", age, diet, "Tropical / Rainforest", "Medium",
-                         nocturnal=False, aggressiveness=1)
+                         zoo, nocturnal=False, aggressiveness=1)
         self._set_cry("Squeak")
         self._set_sleep("hanging from a tree")
 
@@ -125,9 +124,9 @@ class Sloth(Mammal):
 
 
 class BrownBear(Mammal):
-    def __init__(self, name, age, diet="Omnivore"):
+    def __init__(self, name, age, zoo, diet="Omnivore"):
         super().__init__(name, "Brown Bear", age, diet, "Forest / Temperate", "Large",
-                         nocturnal=True, aggressiveness=8)
+                         zoo, nocturnal=True, aggressiveness=8)
         self._set_cry("Growl")
         self._set_sleep("in a cave")
 
@@ -136,9 +135,9 @@ class BrownBear(Mammal):
 
 
 class Wolf(Mammal):
-    def __init__(self, name, age, diet="Carnivore"):
+    def __init__(self, name, age, zoo, diet="Carnivore"):
         super().__init__(name, "Wolf", age, diet, "Forest / Temperate", "Medium",
-                         nocturnal=True, aggressiveness=6)
+                         zoo, nocturnal=True, aggressiveness=6)
         self._set_cry("Howl")
         self._set_sleep("in a den")
 
@@ -147,9 +146,9 @@ class Wolf(Mammal):
 
 
 class Deer(Mammal):
-    def __init__(self, name, age, diet="Herbivore"):
+    def __init__(self, name, age, zoo, diet="Herbivore"):
         super().__init__(name, "Deer", age, diet, "Forest / Temperate", "Medium",
-                         nocturnal=False, aggressiveness=2)
+                         zoo, nocturnal=False, aggressiveness=2)
         self._set_cry("Bleat")
         self._set_sleep("in the undergrowth")
 
@@ -158,9 +157,9 @@ class Deer(Mammal):
 
 
 class Fox(Mammal):
-    def __init__(self, name, age, diet="Omnivore"):
+    def __init__(self, name, age, zoo, diet="Omnivore"):
         super().__init__(name, "Fox", age, diet, "Forest / Temperate", "Medium",
-                         nocturnal=True, aggressiveness=4)
+                         zoo, nocturnal=True, aggressiveness=4)
         self._set_cry("Yip")
         self._set_sleep("in a burrow")
 
@@ -169,9 +168,9 @@ class Fox(Mammal):
 
 
 class PolarBear(Mammal):
-    def __init__(self, name, age, diet="Carnivore"):
+    def __init__(self, name, age, zoo, diet="Carnivore"):
         super().__init__(name, "Polar Bear", age, diet, "Arctic / Polar", "Large",
-                         nocturnal=False, aggressiveness=9)
+                         zoo, nocturnal=False, aggressiveness=9)
         self._set_cry("Roar")
         self._set_sleep("on ice floes")
 
@@ -180,9 +179,9 @@ class PolarBear(Mammal):
 
 
 class ArcticFox(Mammal):
-    def __init__(self, name, age, diet="Omnivore"):
+    def __init__(self, name, age, zoo, diet="Omnivore"):
         super().__init__(name, "Arctic Fox", age, diet, "Arctic / Polar", "Medium",
-                         nocturnal=True, aggressiveness=3)
+                         zoo, nocturnal=True, aggressiveness=3)
         self._set_cry("Yip")
         self._set_sleep("in snow dens")
 
@@ -191,9 +190,9 @@ class ArcticFox(Mammal):
 
 
 class Seal(Mammal):
-    def __init__(self, name, age, diet="Carnivore"):
+    def __init__(self, name, age, zoo, diet="Carnivore"):
         super().__init__(name, "Seal", age, diet, "Arctic / Polar", "Large",
-                         nocturnal=False, aggressiveness=2)
+                         zoo, nocturnal=False, aggressiveness=2)
         self._set_cry("Bark")
         self._set_sleep("on ice")
 
@@ -202,9 +201,9 @@ class Seal(Mammal):
 
 
 class Walrus(Mammal):
-    def __init__(self, name, age, diet="Omnivore"):
+    def __init__(self, name, age, zoo, diet="Omnivore"):
         super().__init__(name, "Walrus", age, diet, "Arctic / Polar", "Large",
-                         nocturnal=False, aggressiveness=4)
+                         zoo, nocturnal=False, aggressiveness=4)
         self._set_cry("Bellow")
         self._set_sleep("on the shore")
 
@@ -213,9 +212,9 @@ class Walrus(Mammal):
 
 
 class Reindeer(Mammal):
-    def __init__(self, name, age, diet="Herbivore"):
+    def __init__(self, name, age, zoo, diet="Herbivore"):
         super().__init__(name, "Reindeer", age, diet, "Arctic / Polar", "Medium",
-                         nocturnal=False, aggressiveness=1)
+                         zoo, nocturnal=False, aggressiveness=1)
         self._set_cry("Bleat")
         self._set_sleep("in snow")
 
@@ -224,9 +223,9 @@ class Reindeer(Mammal):
 
 
 class Camel(Mammal):
-    def __init__(self, name, age, diet="Herbivore"):
+    def __init__(self, name, age, zoo, diet="Herbivore"):
         super().__init__(name, "Camel", age, diet, "Desert", "Large",
-                         nocturnal=False, aggressiveness=3)
+                         zoo, nocturnal=False, aggressiveness=3)
         self._set_cry("Grunt")
         self._set_sleep("in the sand")
 
@@ -235,9 +234,9 @@ class Camel(Mammal):
 
 
 class MeerkatDesert(Mammal):
-    def __init__(self, name, age, diet="Omnivore"):
+    def __init__(self, name, age, zoo, diet="Omnivore"):
         super().__init__(name, "Meerkat", age, diet, "Desert", "Small",
-                         nocturnal=True, aggressiveness=4)
+                         zoo, nocturnal=True, aggressiveness=4)
         self._set_cry("Chirp")
         self._set_sleep("in burrow")
 

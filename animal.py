@@ -9,11 +9,10 @@ This is my own work as defined by the University's Academic Integrity Policy.
 
 class Animal:
     """Represents a zoo animal."""
-    zoo_animals = []
 
     def __init__(self, name: str, species: str, age: int, diet: str,
-                 biome: str, enclosure_size: str, enclosure=None) -> None:
-        self.__id = self.get_next_id()
+                 biome: str, enclosure_size: str, zoo, enclosure=None) -> None:
+        self.__id = self.get_next_id(zoo)
         self.__name = name
         self.__species = species
         self.__age = age
@@ -28,23 +27,16 @@ class Animal:
         self.__behavior = None
         self.__under_treatment = False
         self.__enclosure = enclosure
+        self.zoo = zoo
 
-        Animal.zoo_animals.append(self)
-
-    @classmethod
-    def get_next_id(cls):
-        next_available_id = 1
-        while any(next_available_id == animal._Animal__id for animal in cls.zoo_animals):
-            next_available_id += 1
-        return next_available_id
-
-    @classmethod
-    def list_all_animals(cls):
-        if not cls.zoo_animals:
-            print("No animals exist.")
-        else:
-            for animal in cls.zoo_animals:
-                print(animal)
+    @staticmethod
+    def get_next_id(zoo):
+        next_id = 1
+        if zoo:
+            existing_ids = [animal.id for animal in zoo.animals]
+            while next_id in existing_ids:
+                next_id += 1
+        return next_id
 
     @property
     def id(self):
@@ -78,41 +70,15 @@ class Animal:
     def enclosure(self):
         return self.__enclosure
 
-    @property
-    def cry_sound(self):
-        return self.__cry
-
-    @property
-    def food(self):
-        return self.__food
-
-    @property
-    def sleep_place(self):
-        return self.__sleep
-
     @enclosure.setter
     def enclosure(self, enclosure):
         self.__enclosure = enclosure
 
-    # Methods
+    def _set_cry(self, sound):
+        self.cry = sound
 
-    def _set_cry(self, cry):
-        self.__cry = cry
-
-    def _set_sleep(self, sleep):
-        self.__sleep = sleep
-
-    def cry(self):
-        print(f"{self.name} says {self.cry_sound}.")
-
-    def eat(self):
-        print(f"{self.name} eats {self.food}.")
-
-    def sleep(self):
-        print(f"{self.name} sleeps {self.sleep_place}.")
-
-    def unique_action(self):
-        print(f"{self.name} does something unique.")
+    def _set_sleep(self, place):
+        self.sleeping_place = place
 
     def __str__(self):
         enclosure_info = f"{self.enclosure.enclosure_id} - {self.enclosure.name}" if self.enclosure else "None"
@@ -134,12 +100,14 @@ def add_animal(zoo):
         2: ("Bird", birds.Bird),
         3: ("Reptile", reptiles.Reptile),
         4: ("Amphibian", amphibians.Amphibian),
-        5: ("Aquatic", aquatic.Aquatic)}
+        5: ("Aquatic", aquatic.Aquatic)
+    }
 
     print("\n=== Select animal type ===\n")
     for key, (name, _) in animal_types.items():
         print(f"{key}: {name}")
 
+    # Select animal type
     animal_type = None
     while animal_type not in animal_types:
         try:
@@ -149,8 +117,20 @@ def add_animal(zoo):
 
     type_name, base_class = animal_types[animal_type]
 
-    # Find all subclasses of the base class
-    subclasses = [cls for cls in base_class.__subclasses__()]
+    # List all subclasses
+    def all_subclasses(cls):
+        result = []
+        for subclass in cls.__subclasses__():
+            result.append(subclass)
+            result.extend(all_subclasses(subclass))
+        return result
+
+    subclasses = all_subclasses(base_class)
+    if not subclasses:
+        print(f"No {type_name} subclasses found.")
+        return None
+
+    # Let user pick subclass
     print(f"\nAvailable {type_name}s:")
     for i, cls in enumerate(subclasses, start=1):
         print(f"{i}: {cls.__name__}")
@@ -166,13 +146,13 @@ def add_animal(zoo):
         except ValueError:
             print("Enter a number.")
 
-    # Ask for the animal's name
+    # Name animal
     animal_name = input(f"Enter {subclass.__name__}'s name: ")
 
     # Create animal
-    animal_instance = subclass(name=animal_name, age=0)
+    animal_instance = subclass(name=animal_name, age=0, zoo=zoo)
 
-    # Add the animal to the zoo
+    # Add to zoo
     zoo.animals.append(animal_instance)
 
     print(f"\nAdded {type_name} '{animal_name}' ({subclass.__name__}) with animal ID {animal_instance.id}")
@@ -181,27 +161,26 @@ def add_animal(zoo):
 
 def remove_animal(zoo):
     """Removes an animal from the Zoo"""
-    if not Animal.zoo_animals:
+    if not zoo.animals:
         print("No animals exist.")
         return
-
-    Animal.list_all_animals()
+    list_animals(zoo)
     try:
         animal_id = int(input("Enter the ID of the animal to remove: "))
-        for animal in Animal.zoo_animals:
-            if animal.id == animal_id:
-                Animal.zoo_animals.remove(animal)
-                print(f"Animal #{animal_id} removed.")
-                return
-        print(f"No animal found with ID {animal_id}.")
+        animal_to_remove = next((a for a in zoo.animals if a.id == animal_id), None)
+        if animal_to_remove:
+            zoo.animals.remove(animal_to_remove)
+            print(f"Animal #{animal_id} removed.")
+        else:
+            print(f"No animal found with ID {animal_id}.")
     except ValueError:
         print("Input must be a number.")
+
 
 def list_animals(zoo):
     """Lists all animals and their details."""
     if not zoo.animals:
         print("No animals in the zoo.")
     else:
-        print("\n=== Animals in the zoo ===\n")
         for animal in zoo.animals:
-            print("-", animal)
+            print(animal)

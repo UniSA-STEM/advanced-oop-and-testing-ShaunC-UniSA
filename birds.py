@@ -12,9 +12,9 @@ from animal import Animal
 # Main class
 class Bird(Animal):
     """All birds have these traits"""
-    def __init__(self, name, species, age, diet, biome, enclosure_size,
+    def __init__(self, name, species, age, diet, biome, enclosure_size, zoo,
                  wingspan_cm=50, can_fly=True):
-        super().__init__(name, species, age, diet, biome, enclosure_size)
+        super().__init__(name, species, age, diet, biome, enclosure_size, zoo)
         self.wingspan_cm = wingspan_cm
         self.can_fly = can_fly
         self._set_cry("Chirp")
@@ -27,8 +27,8 @@ class Bird(Animal):
 
 # Subclasses
 class Ostrich(Bird):
-    def __init__(self, name, age, diet="Omnivore"):
-        super().__init__(name, "Ostrich", age, diet, "Savannah / Grassland", "Medium",
+    def __init__(self, name, age, zoo, diet="Omnivore"):
+        super().__init__(name, "Ostrich", age, diet, "Savannah / Grassland", "Medium", zoo,
                          wingspan_cm=200, can_fly=False)
         self._set_cry("Boom")
         self._set_sleep("on the ground")
@@ -38,8 +38,8 @@ class Ostrich(Bird):
 
 
 class Vulture(Bird):
-    def __init__(self, name, age, diet="Carnivore"):
-        super().__init__(name, "Vulture", age, diet, "Savannah / Grassland", "Medium",
+    def __init__(self, name, age, zoo, diet="Carnivore"):
+        super().__init__(name, "Vulture", age, diet, "Savannah / Grassland", "Medium", zoo,
                          wingspan_cm=250, can_fly=True)
         self._set_cry("Screech")
         self._set_sleep("in trees")
@@ -49,8 +49,8 @@ class Vulture(Bird):
 
 
 class Parrot(Bird):
-    def __init__(self, name, age, diet="Herbivore"):
-        super().__init__(name, "Parrot", age, diet, "Tropical / Rainforest", "Small",
+    def __init__(self, name, age, zoo, diet="Herbivore"):
+        super().__init__(name, "Parrot", age, diet, "Tropical / Rainforest", "Small", zoo,
                          wingspan_cm=40, can_fly=True)
         self._set_cry("Squawk")
         self._set_sleep("in trees")
@@ -60,8 +60,8 @@ class Parrot(Bird):
 
 
 class Toucan(Bird):
-    def __init__(self, name, age, diet="Omnivore"):
-        super().__init__(name, "Toucan", age, diet, "Tropical / Rainforest", "Small",
+    def __init__(self, name, age, zoo, diet="Omnivore"):
+        super().__init__(name, "Toucan", age, diet, "Tropical / Rainforest", "Small", zoo,
                          wingspan_cm=60, can_fly=True)
         self._set_cry("Croak")
         self._set_sleep("in tree branches")
@@ -71,8 +71,8 @@ class Toucan(Bird):
 
 
 class Macaw(Bird):
-    def __init__(self, name, age, diet="Herbivore"):
-        super().__init__(name, "Macaw", age, diet, "Tropical / Rainforest", "Medium",
+    def __init__(self, name, age, zoo, diet="Herbivore"):
+        super().__init__(name, "Macaw", age, diet, "Tropical / Rainforest", "Medium", zoo,
                          wingspan_cm=100, can_fly=True)
         self._set_cry("Squawk")
         self._set_sleep("in treetops")
@@ -82,8 +82,8 @@ class Macaw(Bird):
 
 
 class Owl(Bird):
-    def __init__(self, name, age, diet="Carnivore"):
-        super().__init__(name, "Owl", age, diet, "Forest / Temperate", "Small",
+    def __init__(self, name, age, zoo, diet="Carnivore"):
+        super().__init__(name, "Owl", age, diet, "Forest / Temperate", "Small", zoo,
                          wingspan_cm=120, can_fly=True)
         self._set_cry("Hoot")
         self._set_sleep("in tree hollows during the day")
@@ -93,8 +93,8 @@ class Owl(Bird):
 
 
 class Woodpecker(Bird):
-    def __init__(self, name, age, diet="Omnivore"):
-        super().__init__(name, "Woodpecker", age, diet, "Forest / Temperate", "Small",
+    def __init__(self, name, age, zoo, diet="Omnivore"):
+        super().__init__(name, "Woodpecker", age, diet, "Forest / Temperate", "Small", zoo,
                          wingspan_cm=30, can_fly=True)
         self._set_cry("Drill")
         self._set_sleep("in tree cavities")
@@ -104,8 +104,8 @@ class Woodpecker(Bird):
 
 
 class Penguin(Bird):
-    def __init__(self, name, age, diet="Carnivore"):
-        super().__init__(name, "Penguin", age, diet, "Arctic / Polar", "Medium",
+    def __init__(self, name, age, zoo, diet="Carnivore"):
+        super().__init__(name, "Penguin", age, diet, "Arctic / Polar", "Medium", zoo,
                          wingspan_cm=0, can_fly=False)
         self._set_cry("Honk")
         self._set_sleep("on ice")
@@ -115,8 +115,8 @@ class Penguin(Bird):
 
 
 class Puffin(Bird):
-    def __init__(self, name, age, diet="Carnivore"):
-        super().__init__(name, "Puffin", age, diet, "Arctic / Polar", "Small",
+    def __init__(self, name, age, zoo, diet="Carnivore"):
+        super().__init__(name, "Puffin", age, diet, "Arctic / Polar", "Small", zoo,
                          wingspan_cm=50, can_fly=True)
         self._set_cry("Growl")
         self._set_sleep("in burrows")
@@ -126,8 +126,8 @@ class Puffin(Bird):
 
 
 class SnowyOwl(Bird):
-    def __init__(self, name, age, diet="Carnivore"):
-        super().__init__(name, "Snowy Owl", age, diet, "Arctic / Polar", "Small",
+    def __init__(self, name, age, zoo, diet="Carnivore"):
+        super().__init__(name, "Snowy Owl", age, diet, "Arctic / Polar", "Small", zoo,
                          wingspan_cm=150, can_fly=True)
         self._set_cry("Hoot")
         self._set_sleep("on snowy branches")
@@ -137,8 +137,8 @@ class SnowyOwl(Bird):
 
 
 class Roadrunner(Bird):
-    def __init__(self, name, age, diet="Omnivore"):
-        super().__init__(name, "Roadrunner", age, diet, "Desert", "Small",
+    def __init__(self, name, age, zoo, diet="Omnivore"):
+        super().__init__(name, "Roadrunner", age, diet, "Desert", "Small", zoo,
                          wingspan_cm=45, can_fly=True)
         self._set_cry("Beep-beep")
         self._set_sleep("in desert shrubs")
