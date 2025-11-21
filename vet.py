@@ -20,55 +20,80 @@ def vet_menu(zoo):
         print("4. Zoo Health Report")
         print("5. Return")
 
-        choice = input("Select option: ").strip()
-
-        if choice == "5":
-            return
-
-        # pick an animal
-        print("\nSelect an animal:")
-        for i, a in enumerate(zoo.animals, start=1):
-            print(f"{i}. {a.name} ({a.species})")
-        try:
-            idx = int(input("Enter number: ")) - 1
-            animal = zoo.animals[idx]
-        except:
-            print("Invalid animal.")
-            continue
+        choice = input("\nSelect an option: ").strip()
 
         if choice == "1":
-            add_health_issue(animal)
+            animal = select_animal(zoo)
+            if animal:
+                add_health_issue(animal)
+
         elif choice == "2":
-            resolve_health_issue(animal)
+            animal = select_animal(zoo)
+            if animal:
+                resolve_health_issue(animal)
+
         elif choice == "3":
-            health_report(animal)
+            animal = select_animal(zoo)
+            if animal:
+                animal_health_report(animal)
+
         elif choice == "4":
             zoo_health_report(zoo)
+
+        elif choice == "5":
+            return
+
         else:
             print("Invalid option.")
 
 
+def select_animal(zoo):
+    print("\nAnimals:")
+    for i, a in enumerate(zoo.animals, start=1):
+        print(f"{i}. {a.name} ({a.species})")
+
+    try:
+        num = int(input("Enter number: ").strip())
+        if 1 <= num <= len(zoo.animals):
+            return zoo.animals[num - 1]
+        else:
+            print("Invalid number.")
+            return None
+    except ValueError:
+        print("Invalid input.")
+        return None
+
+
 # Vet Functions
 def add_health_issue(animal):
-    """Add an injury, illness, or behaviour issue."""
+    """Add an injury, illness, or behaviour issue as a HealthRecord."""
     print(f"\nAdd health issue for {animal.name}:")
     print("1. Injury")
     print("2. Illness")
     print("3. Behaviour Issue")
 
     choice = input("Select type: ").strip()
-
     desc = input("Enter description: ").strip()
     if not desc:
         print("Description required.")
         return
 
+    severity = input("Enter severity (Low/Moderate/High): ").strip().capitalize()
+    if severity not in ["Low", "Moderate", "High"]:
+        print("Invalid severity, defaulting to Low.")
+        severity = "Low"
+
+    record = HealthRecord(description=desc, severity=severity)
+
     if choice == "1":
-        animal.injuries = desc
+        animal.injuries = animal.injuries or []
+        animal.injuries.append(record)
     elif choice == "2":
-        animal.illnesses = desc
+        animal.illnesses = animal.illnesses or []
+        animal.illnesses.append(record)
     elif choice == "3":
-        animal.behavior = desc
+        animal.behavior = animal.behavior or []
+        animal.behavior.append(record)
     else:
         print("Invalid choice.")
         return
@@ -78,39 +103,48 @@ def add_health_issue(animal):
 
 
 def resolve_health_issue(animal):
-    """Animals in quarantine can be treated."""
+    """Resolve all active HealthRecords if in Quarantine."""
     if not animal.enclosure or animal.enclosure.biome != "Quarantine":
         print(f"{animal.name} must be in Quarantine to resolve health issues.")
         return
 
-    animal.injuries = None
-    animal.illnesses = None
-    animal.behavior = None
+    for record_list in [animal.injuries, animal.illnesses, animal.behavior]:
+        if record_list:
+            for record in record_list:
+                record.resolved = True
+
     animal.under_treatment = False
-    print(f"Health issues for {animal.name} have been resolved.")
+    print(f"All health issues for {animal.name} have been resolved.")
 
 
-def health_report(animal):
-    """Print health information for a single animal."""
+def animal_health_report(animal):
+    """Print health information for a single animal using HealthRecords."""
     print(f"\n--- Health Report: {animal.name} ---")
-    print(f"Injuries: {animal.injuries if animal.injuries else 'None'}")
-    print(f"Illnesses: {animal.illnesses if animal.illnesses else 'None'}")
-    print(f"Behaviour Issues: {animal.behavior if animal.behavior else 'None'}")
+
+    def print_records(title, records):
+        print(f"{title}:")
+        if records:
+            for r in records:
+                print(f"  - {r}")
+        else:
+            print("  None")
+
+    print_records("Injuries", animal.injuries)
+    print_records("Illnesses", animal.illnesses)
+    print_records("Behaviour Issues", animal.behavior)
     print(f"Under Treatment: {'Yes' if animal.under_treatment else 'No'}")
 
 
 def zoo_health_report(zoo):
-    """Print health report for all animals with issues."""
+    """Print health report for all animals with active HealthRecords."""
     print("\n=== Zoo Health Report ===")
     any_issue = False
     for animal in zoo.animals:
-        if animal.injuries or animal.illnesses or animal.behavior or animal.under_treatment:
+        records_exist = any([animal.injuries, animal.illnesses, animal.behavior])
+        if records_exist:
             any_issue = True
             print(f"\n--- {animal.name} ({animal.species}) ---")
-            print(f"Injuries: {animal.injuries if animal.injuries else 'None'}")
-            print(f"Illnesses: {animal.illnesses if animal.illnesses else 'None'}")
-            print(f"Behaviour Issues: {animal.behavior if animal.behavior else 'None'}")
-            print(f"Under Treatment: {'Yes' if animal.under_treatment else 'No'}")
+            animal_health_report(animal)
     if not any_issue:
         print("No animals with health issues.")
     print("End of report.\n")

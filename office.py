@@ -11,6 +11,7 @@ This is my own work as defined by the University's Academic Integrity Policy.
 import os
 import pickle
 from staff import Staff, add_staff, remove_staff, list_all_staff
+from main import run_quickstart_demo
 import tasks
 
 
@@ -93,7 +94,7 @@ def manage_animals(zoo):
 
 # Enclosure Management
 def manage_enclosures(zoo):
-    from enclosure import add_enclosure, remove_enclosure, list_enclosures
+    from enclosure import Enclosure, add_enclosure, remove_enclosure, list_enclosures
 
     while True:
         print("\n=== Manage Enclosures ===\n")
@@ -124,6 +125,8 @@ def manage_enclosures(zoo):
 
 # Staff Management
 def manage_staff(zoo):
+    from staff import Staff, add_staff, remove_staff
+
     while True:
         print("\n=== Manage Staff ===\n")
         print("1. Add Staff")
@@ -131,9 +134,7 @@ def manage_staff(zoo):
         print("3. List Staff")
         print("4. Assign Task to Staff")
         print("5. Remove Task from Staff")
-        print("6. View Staff Schedule")
-        print("7. Complete Task")
-        print("8. Return to Main Menu")
+        print("6. Return to Main Menu")
         choice = input("\nSelect an option: ")
 
         if choice == "1":
@@ -147,68 +148,10 @@ def manage_staff(zoo):
         elif choice == "5":
             remove_task_menu(zoo)
         elif choice == "6":
-            view_schedule_menu(zoo)
-        elif choice == "7":
-            complete_task_menu(zoo)
-        elif choice == "8":
             return
         else:
             print("Invalid choice. Enter 1–8.")
 
-
-def complete_task_menu(zoo):
-    if not zoo.staff:
-        print("No staff available.")
-        return
-
-    # Select staff member
-    list_all_staff(zoo)
-    try:
-        staff_id = int(input("\nEnter staff ID to complete task: "))
-        staff_member = next((s for s in zoo.staff if s.id == staff_id), None)
-        if not staff_member:
-            print("Staff not found.")
-            return
-
-        # Show schedule
-        print(f"\nSchedule for {staff_member.firstname}:")
-        for i, task in enumerate(staff_member.schedule, start=1):
-            status = task if task else "Free"
-            print(f"{i}. {status}")
-
-        # Select hour with task
-        hour = int(input("Select hour number to complete task: "))
-        if not (1 <= hour <= 7) or not staff_member.schedule[hour - 1]:
-            print("Invalid selection or no task assigned at this hour.")
-            return
-
-        task_name = staff_member.schedule[hour - 1]
-
-        # Map task names to functions
-        task_map = {
-            "Feed Animals": tasks.feed_animals,
-            "Clean Enclosure": tasks.clean_enclosure,
-            "Move Animals": tasks.move_animal
-        }
-
-        if task_name not in task_map:
-            print(f"Task '{task_name}' not implemented.")
-            return
-
-        # Execute task
-        if task_name == "Feed Animals":
-            task_map[task_name]()
-        elif task_name == "Clean Enclosure":
-            task_map[task_name]()
-        elif task_name == "Move Animals":
-            task_map[task_name](zoo)
-
-        # Mark task as completed
-        staff_member.remove_task(hour)
-        print(f"Task '{task_name}' completed and removed from schedule.")
-
-    except ValueError:
-        print("Invalid input. Enter a number.")
 
 def assign_task_menu(zoo):
     if not zoo.staff:
@@ -231,16 +174,17 @@ def assign_task_menu(zoo):
         hour = int(input("Select hour to assign task (1–7): "))
 
         # Example tasks
-        tasks = ["Feed Animals", "Move Animals", "Clean Enclosure"]
+        tasks_list = ["Feed Animals", "Move Animals", "Clean Enclosure"]
         print("\nAvailable tasks:")
-        for i, task in enumerate(tasks, start=1):
+        for i, task in enumerate(tasks_list, start=1):
             print(f"{i}. {task}")
 
         task_choice = int(input("Select task: "))
-        staff_member.set_task(hour, tasks[task_choice - 1])
+        staff_member.set_task(hour, tasks_list[task_choice - 1])
         print(f"Task assigned for Hour {hour}.")
     except ValueError:
         print("Invalid input.")
+
 
 def remove_task_menu(zoo):
     if not zoo.staff:
@@ -263,56 +207,36 @@ def remove_task_menu(zoo):
     except ValueError:
         print("Invalid input.")
 
-def view_schedule_menu(zoo):
-    if not zoo.staff:
-        print("No staff to view.")
-        return
 
-    list_all_staff(zoo)
-    try:
-        staff_id = int(input("Enter staff ID to view schedule: "))
-        staff_member = next((s for s in zoo.staff if s.id == staff_id), None)
-        if staff_member:
-            staff_member.list_schedule()
-        else:
-            print("Staff not found.")
-    except ValueError:
-        print("Invalid input.")
-
-
-# Vet Management
-def manage_vet(zoo):
-    pass  # TODO
-
-
-# Zoo Preloader Menu
-def zoo_init():
+# Staff Menu
+def staff_menu(zoo):
+    import tasks
     running = True
     while running:
-        print("\n=== ZooInit Preloader \u00A9 ByteWise Consulting ===\n")
-        print("1. Create a New Zoo")
-        print("2. Load Existing Zoo")
-        print("3. Test / Debug Menu")
-        print("4. Quit")
+        print("\n=== Staff Menu ===\n")
+        print("1. View Staff Schedule")
+        print("2. Complete Task")
+        print("3. Adhoc Task")
+        print("4. Return to Main Menu")
 
         choice = input("\nSelect an option: ")
 
         if choice == "1":
-            name = input("Enter name for new zoo: ")
-            return Zoo(name)
-
+            tasks.view_schedule_menu(zoo)
         elif choice == "2":
-            return Zoo.load()
-
+            tasks.complete_task_menu(zoo)
         elif choice == "3":
-            pass # TODO: implement test here later
-
+            tasks.adhoc_task(zoo)
         elif choice == "4":
-            print("Shutting down ZooInit.")
-            return None
-
+            return
         else:
             print("Invalid choice. Enter 1–4.")
+
+
+# Vet Management
+def manage_vet(zoo):
+    from vet import vet_menu
+    vet_menu(zoo)
 
 
 # Zoo Main Menu
@@ -323,8 +247,9 @@ def main_menu(zoo):
         print("1. Manage Animals")
         print("2. Manage Enclosures")
         print("3. Manage Staff")
-        print("4. Manage Vet Services")
-        print("5. Quit")
+        print("4. Staff Menu")
+        print("5. Manage Vet Services")
+        print("6. Quit")
         option = input("\nSelect an option: ")
 
         if option == "1":
@@ -334,18 +259,48 @@ def main_menu(zoo):
         elif option == "3":
             manage_staff(zoo)
         elif option == "4":
-            manage_vet(zoo)
+            staff_menu(zoo)  # NEW
         elif option == "5":
-            print("\nSaving Zoo data and exiting...")
+            manage_vet(zoo)
+        elif option == "6":
+            print("Exiting... saving zoo...")
             zoo.save()
             running = False
         else:
-            print("Invalid choice. Enter 1–5.")
+            print("Invalid choice. Enter 1–6.")
+
+
+# Zoo Preloader Menu
+def zoo_init():
+    running = True
+    while running:
+        print("\n=== ZooInit Preloader \u00A9 ByteWise Consulting ===\n")
+        print("1. Create a New Zoo")
+        print("2. Load Existing Zoo")
+        print("3. Quickstart / Demo")
+        print("4. Quit")
+
+        choice = input("\nSelect an option: ")
+
+        if choice == "1":
+            name = input("Enter name for new zoo: ")
+            return Zoo(name)
+        elif choice == "2":
+            return Zoo.load()
+        elif choice == "3":
+            demo_name = input("Enter zoo name: ")
+            run_quickstart_demo(demo_name)
+        elif choice == "4":
+            print("Shutting down ZooInit.")
+            return None
+        else:
+            print("Invalid choice. Enter 1–4.")
 
 
 # Start the ZMS
-zoo = zoo_init()
-if zoo is None:
-    print("Exiting Program. Have a nice day!")
-else:
-    main_menu(zoo)
+if __name__ == "__main__":
+    zoo = zoo_init()
+    if zoo is None:
+        print("Exiting Program. Have a nice day!")
+    else:
+        main_menu(zoo)

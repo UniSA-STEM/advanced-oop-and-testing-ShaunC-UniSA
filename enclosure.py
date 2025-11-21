@@ -12,13 +12,15 @@ class Enclosure:
     """Enclosures can hold animals of various types."""
     enclosure_list = []
 
-    def __init__(self, size=str, biome=str, zoo=None):
+    def __init__(self, size=str, biome=str, zoo=None, name=None):
         self.__enclosure_id = self.get_next_id()
-        self.__enclosure_name = "Empty Enclosure"
+        self.__enclosure_name = name if name else "Empty Enclosure"
         self.__enclosure_size = size
         self.__enclosure_biome = biome
         self.__enclosure_cleanliness = 10
         self.__enclosure_animal = []
+
+        Enclosure.enclosure_list.append(self)
 
         if zoo:
             zoo.enclosures.append(self)

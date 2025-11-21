@@ -7,6 +7,12 @@ Username: CANSY012
 This is my own work as defined by the University's Academic Integrity Policy.
 """
 
+# Imports
+from typing import List, Dict
+
+animal_db = None  # will be populated lazily
+
+# Main class
 class Animal:
     """Represents a zoo animal."""
 
@@ -74,6 +80,38 @@ class Animal:
     def enclosure(self, enclosure):
         self.__enclosure = enclosure
 
+    @property
+    def injuries(self):
+        return self.__injuries
+
+    @injuries.setter
+    def injuries(self, value):
+        self.__injuries = value
+
+    @property
+    def illnesses(self):
+        return self.__illnesses
+
+    @illnesses.setter
+    def illnesses(self, value):
+        self.__illnesses = value
+
+    @property
+    def behavior(self):
+        return self.__behavior
+
+    @behavior.setter
+    def behavior(self, value):
+        self.__behavior = value
+
+    @property
+    def under_treatment(self):
+        return self.__under_treatment
+
+    @under_treatment.setter
+    def under_treatment(self, value):
+        self.__under_treatment = value
+
     def _set_cry(self, sound):
         self.cry = sound
 
@@ -85,9 +123,18 @@ class Animal:
         return (f"ID {self.id}: {self.name} ({self.species}) - Age: {self.age}, Diet: {self.diet}, "
                 f"Biome: {self.biome}, Enclosure: {enclosure_info}")
 
-# AnimalOps
+# Get subclasses
+def all_subclasses(cls):
+    """Return a list of all subclasses."""
+    result = []
+    for subclass in cls.__subclasses__():
+        result.append(subclass)
+        result.extend(all_subclasses(subclass))
+    return result
+
+# Zoo Ops
 def add_animal(zoo):
-    """Adds an animal to the Zoo."""
+    """Adds an animal to the Zoo"""
 
     import mammals
     import birds
@@ -107,7 +154,6 @@ def add_animal(zoo):
     for key, (name, _) in animal_types.items():
         print(f"{key}: {name}")
 
-    # Select animal type
     animal_type = None
     while animal_type not in animal_types:
         try:
@@ -117,20 +163,12 @@ def add_animal(zoo):
 
     type_name, base_class = animal_types[animal_type]
 
-    # List all subclasses
-    def all_subclasses(cls):
-        result = []
-        for subclass in cls.__subclasses__():
-            result.append(subclass)
-            result.extend(all_subclasses(subclass))
-        return result
+    subclasses = [c for c in all_subclasses(base_class) if c is not base_class]
 
-    subclasses = all_subclasses(base_class)
     if not subclasses:
         print(f"No {type_name} subclasses found.")
         return None
 
-    # Let user pick subclass
     print(f"\nAvailable {type_name}s:")
     for i, cls in enumerate(subclasses, start=1):
         print(f"{i}: {cls.__name__}")
@@ -146,18 +184,12 @@ def add_animal(zoo):
         except ValueError:
             print("Enter a number.")
 
-    # Name animal
     animal_name = input(f"Enter {subclass.__name__}'s name: ")
-
-    # Create animal
     animal_instance = subclass(name=animal_name, age=0, zoo=zoo)
 
-    # Add to zoo
     zoo.animals.append(animal_instance)
-
-    print(f"\nAdded {type_name} '{animal_name}' ({subclass.__name__}) with animal ID {animal_instance.id}")
+    print(f"\nAdded {type_name} '{animal_name}' ({subclass.__name__}) with ID {animal_instance.id}")
     return animal_instance
-
 
 def remove_animal(zoo):
     """Removes an animal from the Zoo"""
@@ -176,9 +208,8 @@ def remove_animal(zoo):
     except ValueError:
         print("Input must be a number.")
 
-
 def list_animals(zoo):
-    """Lists all animals and their details."""
+    """Lists all animals and their details"""
     if not zoo.animals:
         print("No animals in the zoo.")
     else:

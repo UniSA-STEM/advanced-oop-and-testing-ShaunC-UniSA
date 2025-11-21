@@ -9,8 +9,140 @@ This is my own work as defined by the University's Academic Integrity Policy.
 
 # Imports
 from enclosure import Enclosure
+from staff import list_all_staff
+
+# Allowed roles
+TASK_ROLES = {
+    "Feed Animals": "Zookeeper",
+    "Clean Enclosure": "Groundskeeper",
+    "Move Animals": "Zookeeper",
+    "Health Check": "Veterinarian"}
+
+def can_perform_task(staff_member, task_name):
+    required_role = TASK_ROLES.get(task_name)
+    if not required_role:
+        return False  # Unknown task
+    return staff_member.role == required_role
 
 # Tasks
+def adhoc_task(zoo):
+    """Assign a one-time task to a staff member."""
+    from staff import list_all_staff
+
+    if not zoo.staff:
+        print("No staff available.")
+        return
+
+    # Select staff member
+    list_all_staff(zoo)
+    try:
+        staff_id = int(input("\nEnter staff ID to perform adhoc task: "))
+        staff_member = next((s for s in zoo.staff if s.id == staff_id), None)
+        if not staff_member:
+            print("Staff not found.")
+            return
+
+        # Select task
+        tasks_list = ["Feed Animals", "Clean Enclosure", "Move Animals"]
+        print("\nAvailable tasks:")
+        for i, task in enumerate(tasks_list, start=1):
+            print(f"{i}. {task}")
+
+        task_choice = int(input("Select task: "))
+        if not (1 <= task_choice <= len(tasks_list)):
+            print("Invalid selection.")
+            return
+
+        task_name = tasks_list[task_choice - 1]
+
+        # Check if staff member can perform this task
+        if not can_perform_task(staff_member, task_name):
+            print(f"{staff_member.role} cannot perform the task '{task_name}'.")
+            return
+
+        # Execute task
+        if task_name == "Feed Animals":
+            feed_animals()
+        elif task_name == "Clean Enclosure":
+            clean_enclosure()
+        elif task_name == "Move Animals":
+            move_animal(zoo)
+
+        print(f"Adhoc task '{task_name}' completed by {staff_member.firstname}.")
+
+    except ValueError:
+        print("Invalid input. Enter a number.")
+
+
+def view_schedule_menu(zoo):
+    if not zoo.staff:
+        print("No staff to view.")
+        return
+
+    list_all_staff(zoo)
+    try:
+        staff_id = int(input("Enter staff ID to view schedule: "))
+        staff_member = next((s for s in zoo.staff if s.id == staff_id), None)
+        if staff_member:
+            staff_member.list_schedule()
+        else:
+            print("Staff not found.")
+    except ValueError:
+        print("Invalid input.")
+
+
+def complete_task_menu(zoo):
+    if not zoo.staff:
+        print("No staff available.")
+        return
+
+    # Select staff member
+    list_all_staff(zoo)
+    try:
+        staff_id = int(input("\nEnter staff ID to complete task: "))
+        staff_member = next((s for s in zoo.staff if s.id == staff_id), None)
+        if not staff_member:
+            print("Staff not found.")
+            return
+
+        # Show schedule
+        print(f"\nSchedule for {staff_member.firstname}:")
+        for i, task in enumerate(staff_member.schedule, start=1):
+            status = task if task else "Free"
+            print(f"{i}. {status}")
+
+        # Select hour with task
+        hour = int(input("Select hour number to complete task: "))
+        if not (1 <= hour <= 7) or not staff_member.schedule[hour - 1]:
+            print("Invalid selection or no task assigned at this hour.")
+            return
+
+        task_name = staff_member.schedule[hour - 1]
+
+        # Check if staff member can perform this task
+        if not can_perform_task(staff_member, task_name):
+            print(f"{staff_member.role} cannot perform the task '{task_name}'.")
+            return
+
+        # Execute the appropriate task
+        if task_name == "Feed Animals":
+            feed_animals()
+        elif task_name == "Clean Enclosure":
+            clean_enclosure()
+        elif task_name == "Move Animals":
+            move_animal(zoo)
+        else:
+            print(f"Task '{task_name}' not implemented.")
+            return
+
+        # Mark task as completed
+        staff_member.remove_task(hour)
+        print(f"Task '{task_name}' completed and removed from schedule.")
+
+    except ValueError:
+        print("Invalid input. Enter a number.")
+
+
 def clean_enclosure():
     """Sets cleanliness of an enclosure to 10."""
     if not Enclosure.enclosure_list:

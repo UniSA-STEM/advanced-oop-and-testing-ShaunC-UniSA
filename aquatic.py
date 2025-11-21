@@ -7,11 +7,14 @@ Username: CANSY012
 This is my own work as defined by the University's Academic Integrity Policy.
 """
 
+# Imports
 from animal import Animal
 
 # Main class
 class Aquatic(Animal):
     """All aquatic animals share these traits"""
+    ABSTRACT = True  # Mark as abstract for build_animal_database
+
     def __init__(self, name, species, age, diet, biome, enclosure_size, zoo,
                  can_swim=True, water_type="Freshwater"):
         super().__init__(name, species, age, diet, biome, enclosure_size, zoo)
@@ -24,88 +27,97 @@ class Aquatic(Animal):
     def unique_action(self):
         print(f"{self.name} swims around gracefully.")
 
-
 # Subclasses
 class Dolphin(Aquatic):
+    BIOME = "Aquatic / Marine"
+    SIZE = "Large"
+
     def __init__(self, name, age, zoo, diet="Carnivore"):
-        super().__init__(name, "Dolphin", age, diet, "Aquatic / Marine", "Large",
-                         zoo, water_type="Saltwater")
+        super().__init__(name, "Dolphin", age, diet, self.BIOME, self.SIZE, zoo, water_type="Saltwater")
         self._set_cry("Click/Whistle")
         self._set_sleep("half of brain sleeps at a time")
 
     def unique_action(self):
         print(f"{self.name} performs flips and jumps out of water.")
 
-
 class Seal(Aquatic):
+    BIOME = "Aquatic / Marine"
+    SIZE = "Medium"
+
     def __init__(self, name, age, zoo, diet="Carnivore"):
-        super().__init__(name, "Seal", age, diet, "Aquatic / Marine", "Medium", zoo)
+        super().__init__(name, "Seal", age, diet, self.BIOME, self.SIZE, zoo)
         self._set_cry("Bark")
         self._set_sleep("floating or on rocks")
 
     def unique_action(self):
         print(f"{self.name} dives and claps fins.")
 
-
 class Shark(Aquatic):
+    BIOME = "Aquatic / Marine"
+    SIZE = "Large"
+
     def __init__(self, name, age, zoo, diet="Carnivore"):
-        super().__init__(name, "Shark", age, diet, "Aquatic / Marine", "Large",
-                         zoo, water_type="Saltwater")
+        super().__init__(name, "Shark", age, diet, self.BIOME, self.SIZE, zoo, water_type="Saltwater")
         self._set_cry("Silent")
         self._set_sleep("semi-active rest")
 
     def unique_action(self):
         print(f"{self.name} patrols the tank slowly but constantly.")
 
-
 class Clownfish(Aquatic):
+    BIOME = "Aquatic / Marine"
+    SIZE = "Small"
+
     def __init__(self, name, age, zoo, diet="Omnivore"):
-        super().__init__(name, "Clownfish", age, diet, "Aquatic / Marine", "Small",
-                         zoo, water_type="Saltwater")
+        super().__init__(name, "Clownfish", age, diet, self.BIOME, self.SIZE, zoo, water_type="Saltwater")
         self._set_cry("Blub")
         self._set_sleep("hidden among anemones")
 
     def unique_action(self):
         print(f"{self.name} darts in and out of coral.")
 
-
 class Seahorse(Aquatic):
+    BIOME = "Aquatic / Marine"
+    SIZE = "Small"
+
     def __init__(self, name, age, zoo, diet="Carnivore"):
-        super().__init__(name, "Seahorse", age, diet, "Aquatic / Marine", "Small",
-                         zoo, water_type="Saltwater")
+        super().__init__(name, "Seahorse", age, diet, self.BIOME, self.SIZE, zoo, water_type="Saltwater")
         self._set_cry("Silent")
         self._set_sleep("clinging to seaweed")
 
     def unique_action(self):
         print(f"{self.name} swims upright using dorsal fin.")
 
-
 class SeaTurtle(Aquatic):
+    BIOME = "Aquatic / Marine"
+    SIZE = "Medium"
+
     def __init__(self, name, age, zoo, diet="Herbivore"):
-        super().__init__(name, "Sea Turtle", age, diet, "Aquatic / Marine", "Medium",
-                         zoo, water_type="Saltwater")
+        super().__init__(name, "Sea Turtle", age, diet, self.BIOME, self.SIZE, zoo, water_type="Saltwater")
         self._set_cry("Silent")
         self._set_sleep("floating or resting on seafloor")
 
     def unique_action(self):
         print(f"{self.name} glides smoothly through water.")
 
-
 class Octopus(Aquatic):
+    BIOME = "Aquatic / Marine"
+    SIZE = "Medium"
+
     def __init__(self, name, age, zoo, diet="Carnivore"):
-        super().__init__(name, "Octopus", age, diet, "Aquatic / Marine", "Medium",
-                         zoo, water_type="Saltwater")
+        super().__init__(name, "Octopus", age, diet, self.BIOME, self.SIZE, zoo, water_type="Saltwater")
         self._set_cry("Ink squirt")
         self._set_sleep("hidden in crevices")
 
     def unique_action(self):
         print(f"{self.name} uses its tentacles to explore and manipulate objects.")
 
-
 class Crab(Aquatic):
+    BIOME = "Aquatic / Marine"
+    SIZE = "Small"
+
     def __init__(self, name, age, zoo, diet="Omnivore"):
-        super().__init__(name, "Crab", age, diet, "Aquatic / Marine", "Small",
-                         zoo, water_type="Saltwater")
+        super().__init__(name, "Crab", age, diet, self.BIOME, self.SIZE, zoo, water_type="Saltwater")
         self._set_cry("Clack")
         self._set_sleep("in burrows or rocks")
 
