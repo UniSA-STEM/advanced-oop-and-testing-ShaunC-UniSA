@@ -8,39 +8,45 @@ This is my own work as defined by the University's Academic Integrity Policy.
 """
 
 # Imports
+from abc import ABC
+from health import HealthRecord
 import random
+import time
 from animal import Animal, all_subclasses
 from enclosure import Enclosure
 from staff import Staff
 import tasks
 import vet
+from mammals import (Mammal, Lion, Elephant, Giraffe, Zebra, Meerkat, Hyena, Chimpanzee,
+                     Tiger, Sloth, BrownBear, Wolf, Deer, Fox, PolarBear, ArcticFox, Walrus, Reindeer, Camel)
+from birds import Bird, Ostrich, Vulture, Parrot, Toucan, Macaw, Owl, Woodpecker, Penguin, Puffin, SnowyOwl, Roadrunner
+from amphibians import Amphibian, TreeFrog, Toad
+from aquatic import Aquatic, Dolphin, Seal, Shark, Clownfish, Seahorse, SeaTurtle, Octopus, Crab
+from reptiles import Reptile, Python, Iguana, MonitorLizard, Tortoise, Rattlesnake
 
-def pause():
-    input("\nPress Enter to continue…\n")
-
-# Staff
+# Hardcoded staff for zoo quickstart
 STAFF_NAMES = [
-    {"firstname": "Whiskers", "lastname": "McFluffy", "salutation": "Dr.", "role": "Zookeeper"},
-    {"firstname": "Barkley", "lastname": "Woofington", "salutation": "Mr.", "role": "Veterinarian"},
-    {"firstname": "Snappy", "lastname": "Claws", "salutation": "Ms.", "role": "Groundskeeper"}
+    {"firstname": "Fawnella", "lastname": "O'Deer", "salutation": "Ms.", "role": "Zookeeper"},
+    {"firstname": "Dolittle", "lastname": "Eachweek", "salutation": "Dr.", "role": "Veterinarian"},
+    {"firstname": "Willy", "lastname": "Makeit", "salutation": "Mr.", "role": "Groundskeeper"}
 ]
 
-# Max population per enclosure size
+# Global max population per enclosure size
 MAX_POPULATION = {
     "Small": 3,
     "Medium": 5,
     "Large": 8
 }
 
-# Quickstart
+# Dynamically create animal list for zoo quickstart
 def build_animal_database() -> list[dict]:
-    """Build a list of all concrete Animal subclasses with BIOME and SIZE."""
-
+    """Build a list of all concrete Animal subclasses"""
     db = []
 
-    for subclass in all_subclasses(Animal):
-        # Skip abstract base classes
-        if getattr(subclass, "ABSTRACT", False):
+    subclasses = all_subclasses(Animal)
+
+    for subclass in subclasses:
+        if isinstance(subclass, ABC) and subclass is not Animal:
             continue
 
         biome = getattr(subclass, "BIOME", None)
@@ -56,12 +62,10 @@ def build_animal_database() -> list[dict]:
             "class_ref": subclass
         })
 
-    # DEBUG: show what was actually added
-    print(f"DEBUG: Built Animal Database: {[entry['name'] for entry in db]}")
-
     return db
 
 
+# Zoo quickstart setup
 def setup_quickstart_zoo(zoo_name: str):
     from office import Zoo
 
@@ -72,14 +76,15 @@ def setup_quickstart_zoo(zoo_name: str):
     print("\n=== Creating Staff ===")
     for s in STAFF_NAMES:
         staff_member = Staff(s["firstname"], s["lastname"], s["salutation"], s["role"], zoo)
-        print(f"{staff_member.firstname} {staff_member.salutation} {staff_member.lastname} ({staff_member.role})")
+        print(f"{staff_member.salutation} {staff_member.firstname} {staff_member.lastname} ({staff_member.role})")
     pause()
 
     # Create Enclosures
     num_enclosures = int(input("How many enclosures to create? "))
     print(f"\nCreating {num_enclosures} random enclosures…")
     SIZES = ["Small", "Medium", "Large"]
-    available_biomes = ["Tropical / Rainforest", "Desert", "Aquatic / Marine", "Savannah", "Temperate Forest"]
+    available_biomes = ["Tropical / Rainforest", "Desert", "Aquatic / Marine",
+                        "Savannah / Grassland", "Forest / Temperate"]
 
     for i in range(num_enclosures):
         size = random.choice(SIZES)
@@ -89,22 +94,16 @@ def setup_quickstart_zoo(zoo_name: str):
         print(enc)
     pause()
 
-    all_classes = all_subclasses(Animal)
-    print("Loaded Animal subclasses:", [cls.__name__ for cls in all_classes])
-
-    # Build Animal Database **now**
     ANIMAL_DATABASE = build_animal_database()
     if not ANIMAL_DATABASE:
         print("Warning: No animals found in database.")
         return zoo
 
-    # Populate Enclosures
     print("\nPopulating enclosures with animals…")
     for enc in zoo.enclosures:
         if enc.biome == "Quarantine":
-            continue  # skip quarantine
+            continue  # Dont' populate skip quarantine
 
-        # Filter animal database for species matching enclosure biome and size
         eligible_species = [
             sp for sp in ANIMAL_DATABASE
             if sp["biome"] == enc.biome and sp["size"] == enc.size
@@ -114,11 +113,8 @@ def setup_quickstart_zoo(zoo_name: str):
             print(f"No suitable animals for {enc.name} ({enc.biome}, {enc.size})")
             continue
 
-        # Randomly choose a species for this enclosure
         species_data = random.choice(eligible_species)
         cls = species_data["class_ref"]
-
-        # Random number of animals per enclosure
         num_animals = random.randint(1, MAX_POPULATION[enc.size])
         enc.animals.clear()
 
@@ -133,23 +129,28 @@ def setup_quickstart_zoo(zoo_name: str):
         print(f"{enc.name} ({enc.biome}, {enc.size}) has animals: {[a.name for a in enc.animals]}")
     pause()
 
-    print(f"\nZoo '{zoo.name}' setup complete with {len(zoo.enclosures)} enclosures, "
-          f"{len(zoo.animals)} animals, {len(zoo.staff)} staff.\n")
+    print(f"Zoo '{zoo.name}' setup complete with {len(zoo.enclosures)} enclosures, "
+          f"{len(zoo.animals)} animals, {len(zoo.staff)} staff.")
     pause()
 
     return zoo
 
+
 # Demo functions
+
+# Simulate feeding the animals
 def demo_feed_animals(zoo):
     print("\n=== Demo: Feeding Animals ===")
     tasks.feed_animals()
     pause()
 
+# Simulate cleaning an enclosure
 def demo_clean_enclosures(zoo):
     print("\n=== Demo: Cleaning Enclosures ===")
     tasks.clean_enclosure()
     pause()
 
+# Simulate adding and removing tasks from staff
 def demo_random_staff_tasks(zoo):
     print("\n=== Demo: Assigning / Removing Random Staff Tasks ===")
     for s in zoo.staff:
@@ -164,23 +165,40 @@ def demo_random_staff_tasks(zoo):
         print(f"Removed task from {s.salutation} {s.firstname} at hour {hour}")
     pause()
 
+# Simulate an animal injury
 def demo_vet_loop(zoo):
     print("\n=== Demo: Vet / Health Checks ===")
     if not zoo.animals:
         print("No animals to check.")
     else:
         animal = random.choice(zoo.animals)
-        animal.injuries = "Scratch Paw"
+        animal.injuries = [HealthRecord(description="Scratch Paw", severity="Low")]
         animal.under_treatment = True
-        print(f"{animal.name} admitted to quarantine with injury: {animal.injuries}")
+        print(f"{animal.name} admitted to quarantine with injury: {animal.injuries[0]}")
         vet.animal_health_report(animal)
         vet.resolve_health_issue(animal)
         vet.zoo_health_report(zoo)
     pause()
 
-def demo_walk_the_zoo(zoo):
-    print("\n=== TODO: Walk the Zoo Function ===")
-    pause()
+# Simulate zoo walkthrough
+def walk_the_zoo(zoo):
+    for enclosure in zoo.enclosures:
+        print(f"\nWalking to {enclosure.name} ({enclosure.biome} - {enclosure.size})...", end="")
+        for _ in range(3):
+            time.sleep(1)
+            print(".", end="", flush=True)
+        print()
+        if len(enclosure.animals) == 0:
+            print(f"Hmmm... nothing there. Let's move on.")
+            continue
+        print(f"Watching animals in the {enclosure.name}:")
+        for animal in enclosure.animals:
+            action = random.choice([animal.cry, animal.sleep, animal.unique_action])
+            result = action()
+
+            if result:
+                print(f"{animal.name} the {animal.__class__.__name__}: {result}")
+                time.sleep(1)3
 
 # Demo Menu
 def demo_menu(zoo):
@@ -191,7 +209,7 @@ def demo_menu(zoo):
         print("2. Clean Enclosures Loop")
         print("3. Assign/Remove Random Staff Tasks")
         print("4. Vet / Health Check Loop")
-        print("5. Walk the Zoo (TODO)")
+        print("5. Tour the Zoo")
         print("6. Exit Demo")
         selection = input("Select option: ")
         if selection == "1":
@@ -203,11 +221,15 @@ def demo_menu(zoo):
         elif selection == "4":
             demo_vet_loop(zoo)
         elif selection == "5":
-            demo_walk_the_zoo(zoo)
+            walk_the_zoo(zoo)
         elif selection == "6":
             print("Exiting demo…")
         else:
             print("Invalid selection.")
+
+# Pause helper function
+def pause():
+    input("\nPress Enter to continue…\n")
 
 # Quickstart Demo Entry
 def run_quickstart_demo(zoo_name: str):
@@ -216,5 +238,9 @@ def run_quickstart_demo(zoo_name: str):
 
 # Standalone execution
 if __name__ == "__main__":
-    name = input("Enter a name for your demo zoo: ")
-    run_quickstart_demo(name)
+    from office import zoo_init
+    zoo = zoo_init()
+    if zoo is None:
+        print("Exiting Program. Have a nice day!")
+    else:
+        print(f"Zoo '{zoo.name}' has been successfully initialized!")

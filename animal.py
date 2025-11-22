@@ -8,12 +8,12 @@ This is my own work as defined by the University's Academic Integrity Policy.
 """
 
 # Imports
-from typing import List, Dict
+from abc import ABC, abstractmethod
 
 animal_db = None  # will be populated lazily
 
 # Main class
-class Animal:
+class Animal(ABC):
     """Represents a zoo animal."""
 
     def __init__(self, name: str, species: str, age: int, diet: str,
@@ -26,8 +26,8 @@ class Animal:
         self.__biome = biome
         self.__enclosure_size = enclosure_size
         self.__cry = "Animal noises"
-        self.__food = diet
         self.__sleep = "peacefully"
+        self.__food = diet
         self.__injuries = None
         self.__illnesses = None
         self.__behavior = None
@@ -112,11 +112,26 @@ class Animal:
     def under_treatment(self, value):
         self.__under_treatment = value
 
-    def _set_cry(self, sound):
-        self.cry = sound
+    def _set_cry(self, sound: str):
+        self.__cry = lambda: f"{self.name} cries: {sound}"
 
-    def _set_sleep(self, place):
-        self.sleeping_place = place
+    def _set_sleep(self, place: str):
+        self.__sleep = lambda: f"{self.name} sleeps {place}."
+
+    def cry(self):
+        if callable(self.__cry):
+            return self.__cry()
+        else:
+            return f"{self.name} cries: {self.__cry}"
+
+    def sleep(self):
+        if callable(self.__sleep):
+            return self.__sleep()
+        else:
+            return f"{self.name} sleeps {self.__sleep}"
+
+    def unique_action(self):
+        return f"{self.name} behaves uniquely."
 
     def __str__(self):
         enclosure_info = f"{self.enclosure.enclosure_id} - {self.enclosure.name}" if self.enclosure else "None"

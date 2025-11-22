@@ -273,16 +273,3 @@ class Camel(Mammal):
 
     def unique_action(self):
         print(f"{self.name} stores water in its hump.")
-
-class MeerkatDesert(Mammal):
-    BIOME = "Desert"
-    SIZE = "Small"
-
-    def __init__(self, name, age, zoo, diet="Omnivore"):
-        super().__init__(name, "Meerkat", age, diet, self.BIOME, self.SIZE, zoo,
-                         nocturnal=True, aggressiveness=4)
-        self._set_cry("Chirp")
-        self._set_sleep("in burrow")
-
-    def unique_action(self):
-        print(f"{self.name} keeps watch from the desert mound.")

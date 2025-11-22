@@ -42,10 +42,6 @@ class Enclosure:
     def name(self):
         return self.__enclosure_name
 
-    @name.setter
-    def name(self, value):
-        self.__enclosure_name = value
-
     @property
     def size(self):
         return self.__enclosure_size
@@ -58,13 +54,26 @@ class Enclosure:
     def cleanliness(self):
         return self.__enclosure_cleanliness
 
+    @property
+    def animals(self):
+        return self.__enclosure_animal
+
+    @name.setter
+    def name(self, value):
+        self.__enclosure_name = value
+
+    @biome.setter
+    def biome(self, value):
+        self.__enclosure_biome = value
+
     @cleanliness.setter
     def cleanliness(self, value):
         self.__enclosure_cleanliness = max(1, min(10, value))
 
-    @property
-    def animals(self):
-        return self.__enclosure_animal
+    def __eq__(self, other):
+        if not isinstance(other, Enclosure):
+            return False
+        return self.name == other.name and self.biome == other.biome and self.size == other.size
 
     def __str__(self):
         animal_status = "Empty" if not self.__enclosure_animal else type(self.__enclosure_animal[0]).__name__

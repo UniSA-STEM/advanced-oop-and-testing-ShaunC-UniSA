@@ -34,7 +34,17 @@ class Zoo:
             print(f"Error saving zoo: {e}")
 
     @staticmethod
-    def load():
+    def load(filename=None):
+        if filename is not None:
+            try:
+                with open(filename, "rb") as file:
+                    zoo = pickle.load(file)
+                print(f"Zoo loaded from {filename}")
+                return zoo
+            except Exception as e:
+                print(f"Error loading zoo: {e}")
+                return None
+
         zoo_files = [f for f in os.listdir() if f.endswith(".zoo")]
         if not zoo_files:
             print("No zoo files found in the current directory.")
@@ -66,6 +76,12 @@ class Zoo:
         except Exception as e:
             print(f"Error loading zoo: {e}")
             return None
+
+    def add_animal_to_enclosure(self, animal, enclosure):
+        """Assigns an animal to an enclosure and adds it to zoo list."""
+        animal.enclosure = enclosure
+        enclosure.animals.append(animal)
+        self.animals.append(animal)
 
 
 # Animal Management
