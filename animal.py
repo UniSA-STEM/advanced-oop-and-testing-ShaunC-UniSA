@@ -8,9 +8,8 @@ This is my own work as defined by the University's Academic Integrity Policy.
 """
 
 # Imports
-from abc import ABC, abstractmethod
-
-animal_db = None  # will be populated lazily
+from abc import ABC
+from typing import Optional, Any
 
 # Main class
 class Animal(ABC):
@@ -25,8 +24,8 @@ class Animal(ABC):
         self.__diet = diet
         self.__biome = biome
         self.__enclosure_size = enclosure_size
-        self.__cry = "Animal noises"
-        self.__sleep = "peacefully"
+        self.__cry_sound = "Animal noises"
+        self.__sleep_place = "peacefully"
         self.__food = diet
         self.__injuries = None
         self.__illnesses = None
@@ -36,7 +35,8 @@ class Animal(ABC):
         self.zoo = zoo
 
     @staticmethod
-    def get_next_id(zoo):
+    def get_next_id(zoo: Any) -> int:
+        """Get the next available ID for a zoo animal so IDs are unique."""
         next_id = 1
         if zoo:
             existing_ids = [animal.id for animal in zoo.animals]
@@ -45,95 +45,113 @@ class Animal(ABC):
         return next_id
 
     @property
-    def id(self):
+    def id(self) -> int:
+        """Return the unique animal ID."""
         return self.__id
 
     @property
-    def name(self):
+    def name(self) -> str:
+        """Return the animal's name."""
         return self.__name
 
     @property
-    def species(self):
+    def species(self) -> str:
+        """Return the species of the animal."""
         return self.__species
 
     @property
-    def age(self):
+    def age(self) -> int:
+        """Return the age of the animal."""
         return self.__age
 
     @property
-    def diet(self):
+    def diet(self) -> str:
+        """Return the diet of the animal."""
         return self.__diet
 
     @property
-    def biome(self):
+    def biome(self) -> str:
+        """Return the biome of the animal."""
         return self.__biome
 
     @property
-    def enclosure_size(self):
+    def enclosure_size(self) -> str:
+        """Return the required enclosure size for the animal."""
         return self.__enclosure_size
 
     @property
-    def enclosure(self):
+    def enclosure(self) -> Optional[Any]:
+        """Return the enclosure object the animal is in."""
         return self.__enclosure
 
     @enclosure.setter
-    def enclosure(self, enclosure):
+    def enclosure(self, enclosure: Any) -> None:
+        """Set the enclosure for the animal."""
         self.__enclosure = enclosure
 
     @property
-    def injuries(self):
+    def injuries(self) -> Optional[str]:
+        """Return any current injuries of the animal."""
         return self.__injuries
 
     @injuries.setter
-    def injuries(self, value):
+    def injuries(self, value: str) -> None:
+        """Set the injuries of the animal."""
         self.__injuries = value
 
     @property
-    def illnesses(self):
+    def illnesses(self) -> Optional[str]:
+        """Return any current illnesses of the animal."""
         return self.__illnesses
 
     @illnesses.setter
-    def illnesses(self, value):
+    def illnesses(self, value: str) -> None:
+        """Set the illnesses of the animal."""
         self.__illnesses = value
 
     @property
-    def behavior(self):
+    def behavior(self) -> Optional[str]:
+        """Return observed behavior of the animal."""
         return self.__behavior
 
     @behavior.setter
-    def behavior(self, value):
+    def behavior(self, value: str) -> None:
+        """Set the observed behavior of the animal."""
         self.__behavior = value
 
     @property
-    def under_treatment(self):
+    def under_treatment(self) -> bool:
+        """Return whether the animal is under treatment."""
         return self.__under_treatment
 
     @under_treatment.setter
-    def under_treatment(self, value):
+    def under_treatment(self, value: bool) -> None:
+        """Set whether the animal is under treatment."""
         self.__under_treatment = value
 
-    def _set_cry(self, sound: str):
-        self.__cry = lambda: f"{self.name} cries: {sound}"
+    # --- Action Methods ---
+    def set_cry(self, sound: str) -> None:
+        """Set the sound the animal makes when crying."""
+        self.__cry_sound = sound
 
-    def _set_sleep(self, place: str):
-        self.__sleep = lambda: f"{self.name} sleeps {place}."
+    def cry(self) -> str:
+        """Return the animal's cry sound."""
+        return f"{self.name} cries: {self.__cry_sound}"
 
-    def cry(self):
-        if callable(self.__cry):
-            return self.__cry()
-        else:
-            return f"{self.name} cries: {self.__cry}"
+    def set_sleep(self, place: str) -> None:
+        """Set where the animal sleeps."""
+        self.__sleep_place = place
 
-    def sleep(self):
-        if callable(self.__sleep):
-            return self.__sleep()
-        else:
-            return f"{self.name} sleeps {self.__sleep}"
+    def sleep(self) -> str:
+        """Return how/where the animal sleeps."""
+        return f"{self.name} sleeps {self.__sleep_place}"
 
-    def unique_action(self):
+    def unique_action(self) -> str:
+        """Return a string describing a unique action of the animal."""
         return f"{self.name} behaves uniquely."
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return a readable string representation of the animal."""
         enclosure_info = f"{self.enclosure.enclosure_id} - {self.enclosure.name}" if self.enclosure else "None"
         return (f"ID {self.id}: {self.name} ({self.species}) - Age: {self.age}, Diet: {self.diet}, "
                 f"Biome: {self.biome}, Enclosure: {enclosure_info}")
@@ -179,6 +197,16 @@ def add_animal(zoo):
     type_name, base_class = animal_types[animal_type]
 
     subclasses = [c for c in all_subclasses(base_class) if c is not base_class]
+
+    # DEBUG --- WHERE TO PUT IT
+    print("\nDEBUG: Raw subclasses from all_subclasses():")
+    for c in all_subclasses(base_class):
+        print("   →", c)
+
+    print("\nDEBUG: Filtered subclasses list:")
+    for c in subclasses:
+        print("   →", c)
+    # END DEBUG
 
     if not subclasses:
         print(f"No {type_name} subclasses found.")
