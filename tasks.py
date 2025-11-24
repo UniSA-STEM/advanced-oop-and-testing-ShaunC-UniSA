@@ -19,6 +19,7 @@ TASK_ROLES = {
     "Health Check": "Veterinarian"}
 
 def can_perform_task(staff_member, task_name):
+    """Returns True if the staff member can perform the given task."""
     required_role = TASK_ROLES.get(task_name)
     if not required_role:
         return False  # Unknown task
@@ -75,6 +76,7 @@ def adhoc_task(zoo):
 
 
 def view_schedule_menu(zoo):
+    """Displays a staff member's schedule."""
     if not zoo.staff:
         print("No staff to view.")
         return
@@ -92,6 +94,7 @@ def view_schedule_menu(zoo):
 
 
 def complete_task_menu(zoo):
+    """Completes a scheduled task for a staff member and removes it from their schedule."""
     if not zoo.staff:
         print("No staff available.")
         return
@@ -184,12 +187,17 @@ def feed_animals():
 
 
 def move_animal(zoo):
+    """Moves an animal to a different enclosure if not under treatment."""
     if not zoo.animals:
         print("No animals to move.")
         return
 
+    # List animals with current enclosure info
+    print("\nAnimals available to move:")
     for i, a in enumerate(zoo.animals, 1):
-        print(f"{i}. {a.name} ({a.species}) in {a.enclosure.name}")
+        enc_name = a.enclosure.name if a.enclosure else "No enclosure"
+        print(f"{i}. {a.name} ({a.species}) in {enc_name}")
+
     choice = input("Select animal to move: ")
     try:
         animal = zoo.animals[int(choice)-1]
@@ -201,8 +209,11 @@ def move_animal(zoo):
         print(f"{animal.name} is under treatment and cannot be moved.")
         return
 
+    # List all enclosures
+    print("\nEnclosures:")
     for i, enc in enumerate(zoo.enclosures, 1):
         print(f"{i}. {enc.name} ({enc.biome})")
+
     choice = input("Select new enclosure: ")
     try:
         new_enc = zoo.enclosures[int(choice)-1]
@@ -210,8 +221,12 @@ def move_animal(zoo):
         print("Invalid choice.")
         return
 
+    # Remove from old enclosure if it exists
     if animal.enclosure:
         animal.enclosure.animals.remove(animal)
+
+    # Assign new enclosure
     animal.enclosure = new_enc
     new_enc.animals.append(animal)
+
     print(f"{animal.name} moved to {new_enc.name}.")

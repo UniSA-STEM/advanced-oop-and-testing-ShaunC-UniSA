@@ -129,7 +129,6 @@ class Animal(ABC):
         """Set whether the animal is under treatment."""
         self.__under_treatment = value
 
-    # --- Action Methods ---
     def set_cry(self, sound: str) -> None:
         """Set the sound the animal makes when crying."""
         self.__cry_sound = sound
@@ -195,18 +194,7 @@ def add_animal(zoo):
             print("Please enter a number between 1 and 5.")
 
     type_name, base_class = animal_types[animal_type]
-
     subclasses = [c for c in all_subclasses(base_class) if c is not base_class]
-
-    # DEBUG --- WHERE TO PUT IT
-    print("\nDEBUG: Raw subclasses from all_subclasses():")
-    for c in all_subclasses(base_class):
-        print("   →", c)
-
-    print("\nDEBUG: Filtered subclasses list:")
-    for c in subclasses:
-        print("   →", c)
-    # END DEBUG
 
     if not subclasses:
         print(f"No {type_name} subclasses found.")

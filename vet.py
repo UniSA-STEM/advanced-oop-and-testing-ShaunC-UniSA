@@ -12,6 +12,7 @@ from health import HealthRecord
 
 # Vet Services
 def vet_menu(zoo):
+    """Displays the vet services menu for managing animal health."""
     while True:
         print("\n=== Vet Services ===")
         print("1. Add Health Issue")
@@ -48,6 +49,7 @@ def vet_menu(zoo):
 
 
 def select_animal(zoo):
+    """Prompts the user to select an animal from the zoo and returns it."""
     print("\nAnimals:")
     for i, a in enumerate(zoo.animals, start=1):
         print(f"{i}. {a.name} ({a.species})")

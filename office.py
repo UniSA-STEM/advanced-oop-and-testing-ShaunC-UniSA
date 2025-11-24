@@ -11,12 +11,13 @@ This is my own work as defined by the University's Academic Integrity Policy.
 import os
 import pickle
 from staff import Staff, add_staff, remove_staff, list_all_staff
-from main import run_quickstart_demo
+from main import run_quickstart_demo, walk_the_zoo
 import tasks
 
 
 # Zoo class with save/load function
 class Zoo:
+    """Represents a Zoo with animals, enclosures, and staff."""
     def __init__(self, name):
         self.name = name
         self.animals = []
@@ -24,6 +25,7 @@ class Zoo:
         self.enclosures = []
 
     def save(self, filename=None):
+        """Saves the Zoo object to a pickle file."""
         if filename is None:
             filename = self.name + ".zoo"
         try:
@@ -35,6 +37,7 @@ class Zoo:
 
     @staticmethod
     def load(filename=None):
+        """Select zoo to loads from available pickle files."""
         if filename is not None:
             try:
                 with open(filename, "rb") as file:
@@ -78,7 +81,7 @@ class Zoo:
             return None
 
     def add_animal_to_enclosure(self, animal, enclosure):
-        """Assigns an animal to an enclosure and adds it to zoo list."""
+        """Assigns an animal to an enclosure."""
         animal.enclosure = enclosure
         enclosure.animals.append(animal)
         self.animals.append(animal)
@@ -86,6 +89,7 @@ class Zoo:
 
 # Animal Management
 def manage_animals(zoo):
+    """Menu to add, remove or list animals in the zoo."""
     from animal import add_animal, remove_animal, list_animals
 
     while True:
@@ -110,6 +114,7 @@ def manage_animals(zoo):
 
 # Enclosure Management
 def manage_enclosures(zoo):
+    """Menu to add, remove or list enclosures in the zoo."""
     from enclosure import Enclosure, add_enclosure, remove_enclosure, list_enclosures
 
     while True:
@@ -141,6 +146,7 @@ def manage_enclosures(zoo):
 
 # Staff Management
 def manage_staff(zoo):
+    """Menu to add, remove or list staff and to manage staff tasks."""
     from staff import Staff, add_staff, remove_staff
 
     while True:
@@ -170,6 +176,7 @@ def manage_staff(zoo):
 
 
 def assign_task_menu(zoo):
+    """assign tasks to a specific staff member."""
     if not zoo.staff:
         print("No staff to assign tasks.")
         return
@@ -189,7 +196,6 @@ def assign_task_menu(zoo):
 
         hour = int(input("Select hour to assign task (1–7): "))
 
-        # Example tasks
         tasks_list = ["Feed Animals", "Move Animals", "Clean Enclosure"]
         print("\nAvailable tasks:")
         for i, task in enumerate(tasks_list, start=1):
@@ -203,6 +209,7 @@ def assign_task_menu(zoo):
 
 
 def remove_task_menu(zoo):
+    """Menu to remove a task from staff schedule."""
     if not zoo.staff:
         print("No staff to remove tasks from.")
         return
@@ -226,6 +233,7 @@ def remove_task_menu(zoo):
 
 # Staff Menu
 def staff_menu(zoo):
+    """Menu to view staff schedules, complete or perform a task."""
     import tasks
     running = True
     while running:
@@ -251,21 +259,24 @@ def staff_menu(zoo):
 
 # Vet Management
 def manage_vet(zoo):
+    """Access the vet services menu."""
     from vet import vet_menu
     vet_menu(zoo)
 
 
 # Zoo Main Menu
 def main_menu(zoo):
+    """Displays the main management menu for the Zoo."""
     running = True
     while running:
         print("\n=== Welcome to", zoo.name, "Management System ===\n")
         print("1. Manage Animals")
         print("2. Manage Enclosures")
         print("3. Manage Staff")
-        print("4. Staff Menu")
-        print("5. Manage Vet Services")
-        print("6. Quit")
+        print("4. Manage Vet Services")
+        print("5. Staff Menu")
+        print("6. Tour the Zoo")  # new option
+        print("7. Quit")
         option = input("\nSelect an option: ")
 
         if option == "1":
@@ -275,10 +286,12 @@ def main_menu(zoo):
         elif option == "3":
             manage_staff(zoo)
         elif option == "4":
-            staff_menu(zoo)  # NEW
-        elif option == "5":
             manage_vet(zoo)
+        elif option == "5":
+            staff_menu(zoo)
         elif option == "6":
+            walk_the_zoo(zoo)
+        elif option == "7":
             print("Exiting... saving zoo...")
             zoo.save()
             running = False
@@ -288,6 +301,7 @@ def main_menu(zoo):
 
 # Zoo Preloader Menu
 def zoo_init():
+    """Initial menu to create, load, or demo a Zoo."""
     running = True
     while running:
         print("\n=== ZooInit Preloader \u00A9 ByteWise Consulting ===\n")

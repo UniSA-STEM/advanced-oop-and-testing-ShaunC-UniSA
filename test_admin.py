@@ -12,6 +12,7 @@ from office import Zoo, Staff
 from enclosure import Enclosure
 
 def test_zoo_creation():
+    """Tests creating a zoo."""
     zoo = Zoo("TestZoo")
     assert zoo.name == "TestZoo"
     assert zoo.enclosures == []
@@ -19,18 +20,21 @@ def test_zoo_creation():
     assert zoo.staff == []
 
 def test_add_staff_to_zoo():
+    """Tests adding a staff to Zoo updates the staff list correctly."""
     zoo = Zoo("TestZoo")
-    staff_member = Staff("John", "Doe", "Mr", "Zookeeper", zoo)
+    staff_member = Staff("John", "Smith", "Mr", "Zookeeper", zoo)
     assert len(zoo.staff) == 1
     assert zoo.staff[0].role == "Zookeeper"
 
 def test_add_enclosure_to_zoo():
+    """Tests adding an enclosure updates the enclosures list correctly."""
     zoo = Zoo("TestZoo")
     enc = Enclosure(size="Small", biome="Savannah", zoo=zoo)
     zoo.enclosures.append(enc)
     assert enc in zoo.enclosures
 
 def test_save_and_load_zoo(tmp_path):
+    """Tests saving and loading a zoo correctly."""
     zoo = Zoo("SaveZoo")
     file_path = tmp_path / "zoo_test.zoo"
     zoo.save(filename=file_path)

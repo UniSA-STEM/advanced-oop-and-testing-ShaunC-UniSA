@@ -11,7 +11,8 @@ This is my own work as defined by the University's Academic Integrity Policy.
 from datetime import datetime
 
 # Classes
-class HealthRecord:
+class HealthRecord
+    """Represents a health issue for an animal, including severity, treatment, and resolution status."""
     def __init__(self, description, severity, treatment_plan=""):
         self.description = description
         self.date_reported = datetime.now().strftime("%Y-%m-%d")
@@ -20,6 +21,7 @@ class HealthRecord:
         self.resolved = False
 
     def __str__(self):
+        """Returns a summary of the health record."""
         status = "Resolved" if self.resolved else "Active"
         return (f"[{self.date_reported}] {self.description} | "
                 f"Severity: {self.severity} | Status: {status} | "

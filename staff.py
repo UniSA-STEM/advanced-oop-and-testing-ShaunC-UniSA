@@ -8,11 +8,12 @@ This is my own work as defined by the University's Academic Integrity Policy.
 """
 
 # Imports
-from enclosure import Enclosure
+from typing import List, Optional
 
 # Staff
 class Staff:
     """Staff help keep the zoo running and can be assigned to tasks."""
+    WORKDAY_HOURS = 7
 
     def __init__(self, firstname: str, lastname: str, salutation: str, role: str, zoo):
         self.__id = self.get_next_id(zoo)
@@ -21,8 +22,8 @@ class Staff:
         self.__name_salutation = salutation
         self.__role = role
 
-        # Workday schedule (7 hours)
-        self.__schedule = [None] * 7
+        # Daily schedule
+        self.__schedule: List[Optional[str]] = [None] * Staff.WORKDAY_HOURS
 
         # Add staff to the zoo
         zoo.staff.append(self)
@@ -36,48 +37,58 @@ class Staff:
         return next_available_id
 
     @property
-    def id(self):
+    def id(self) -> int:
+        """Staff ID."""
         return self.__id
 
     @property
-    def firstname(self):
+    def firstname(self) -> str:
+        """First name."""
         return self.__name_firstname
 
     @property
-    def lastname(self):
+    def lastname(self) -> str:
+        """Last name."""
         return self.__name_lastname
 
     @property
-    def salutation(self):
+    def salutation(self) -> str:
+        """Salutation."""
         return self.__name_salutation
 
     @property
-    def role(self):
+    def role(self) -> str:
+        """Role in the zoo."""
         return self.__role
 
     @property
-    def schedule(self):
-        return self.__schedule
+    def schedule(self) -> list:
+        """Copy of the workday schedule."""
+        return self.__schedule.copy()
 
-    def set_task(self, hour: int, task: str):
-        if 1 <= hour <= 7:
+    def set_task(self, hour: int, task: str) -> bool:
+        """Assign a task to a specific hour."""
+        if 1 <= hour <= Staff.WORKDAY_HOURS:
             self.__schedule[hour - 1] = task
             return True
         return False
 
-    def remove_task(self, hour: int):
-        if 1 <= hour <= 7:
+    def remove_task(self, hour: int) -> bool:
+        """Remove a task from a specific hour."""
+        if 1 <= hour <= Staff.WORKDAY_HOURS:
             self.__schedule[hour - 1] = None
             return True
         return False
 
     def list_schedule(self):
+        """Print the schedule."""
         print(f"\nSchedule for {self.__name_firstname} {self.__name_lastname}:")
         for i, task in enumerate(self.__schedule, start=1):
             print(f"Hour {i}: {task if task else 'Free'}")
 
-    def __str__(self):
-        full_name = f"{self.__name_firstname} {self.__name_lastname} {self.__name_salutation}"
+    def __str__(self) -> str:
+        """Return a readable staff summary."""
+        full_name = f"{self.__name_salutation} {self.__name_firstname} {self.__name_lastname}"
         return f"Staff #{self.__id} | Name: {full_name} | Role: {self.__role}"
 
 

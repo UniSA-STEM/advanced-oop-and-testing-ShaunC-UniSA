@@ -17,7 +17,8 @@ from health import HealthRecord
 from amphibians import TreeFrog, Toad
 from birds import Ostrich, Vulture, Parrot, Toucan, Macaw, Owl, Woodpecker, Penguin, Puffin, SnowyOwl, Roadrunner
 from aquatic import Dolphin, Seal, Shark, Clownfish, Seahorse, SeaTurtle, Octopus, Crab
-from mammals import Lion, Elephant, Giraffe, Zebra, Meerkat, Hyena, Chimpanzee, Tiger, Sloth, BrownBear, Wolf, Deer, Fox, PolarBear, ArcticFox, Walrus, Reindeer, Camel
+from mammals import (Lion, Elephant, Giraffe, Zebra, Meerkat, Hyena, Chimpanzee, Tiger, Sloth,
+                     BrownBear, Wolf, Deer, Fox, PolarBear, ArcticFox, Walrus, Reindeer, Camel)
 from reptiles import Python, Iguana, MonitorLizard, Tortoise, Rattlesnake
 from animal import Animal, all_subclasses
 from tasks import can_perform_task, clean_enclosure, feed_animals, move_animal
@@ -25,6 +26,7 @@ from tasks import can_perform_task, clean_enclosure, feed_animals, move_animal
 # Fixtures
 @pytest.fixture
 def zoo():
+    """Returns a test Zoo with a single enclosure."""
     Enclosure.enclosure_list.clear()
     z = Zoo("TestZoo")
     enc = Enclosure(size="Small", biome="Savannah", zoo=z)
@@ -34,6 +36,7 @@ def zoo():
 
 @pytest.fixture
 def zoo_with_enclosures():
+    """Returns a test Zoo with two named enclosures."""
     Enclosure.enclosure_list.clear()
     zoo = Zoo("TestZoo")
     enc1 = Enclosure(size="Small", biome="Savannah", zoo=zoo, name="Old Enclosure")
@@ -43,6 +46,7 @@ def zoo_with_enclosures():
 
 @pytest.fixture
 def zoo_with_animals(zoo_with_enclosures):
+    """Returns a test Zoo with enclosures animals."""
     zoo, enc1, enc2 = zoo_with_enclosures
     animal = Lion(name="Leo", age=3, zoo=zoo)
     enc1.animals.append(animal)
@@ -52,6 +56,7 @@ def zoo_with_animals(zoo_with_enclosures):
 
 # Tests
 def test_add_animal_to_enclosure(zoo):
+    """Tests adding an animal to an enclosure."""
     enc = zoo.enclosures[0]
     animal = Lion(name="TestAnimal", age=3, zoo=zoo)
     zoo.add_animal_to_enclosure(animal, enc)
@@ -60,12 +65,14 @@ def test_add_animal_to_enclosure(zoo):
     assert zoo.animals[0].enclosure.name == enc.name
 
 def test_enclosure_max_population(zoo):
+    """Tests an enclosure tracking multiple animals."""
     enc = zoo.enclosures[0]
     for i in range(3):
         zoo.add_animal_to_enclosure(Lion(name=f"Animal{i+1}", age=2, zoo=zoo), enc)
     assert len(enc.animals) == 3
 
 def test_add_and_resolve_health_issue(zoo):
+    """Tests adding and resolving an animal health issue."""
     enc = zoo.enclosures[0]
     enc.biome = "Quarantine"
     animal = Lion(name="SickAnimal", age=4, zoo=zoo)
@@ -80,6 +87,7 @@ def test_add_and_resolve_health_issue(zoo):
     assert all(record.resolved for record in animal.injuries)
 
 def test_can_perform_task():
+    """Tests task permissions for staff roles."""
     class MockStaff:
         def __init__(self, role): self.role = role
     zookeeper = MockStaff("Zookeeper")
@@ -92,6 +100,7 @@ def test_can_perform_task():
     assert not can_perform_task(zookeeper, "Unknown Task")
 
 def test_clean_enclosure(zoo_with_enclosures):
+    """Tests cleaning an enclosure restores cleanliness to maximum."""
     zoo, enc1, enc2 = zoo_with_enclosures
     enc1.cleanliness = 3
     with patch("builtins.input", return_value="1"):
@@ -99,12 +108,14 @@ def test_clean_enclosure(zoo_with_enclosures):
     assert enc1.cleanliness == 10
 
 def test_feed_animals(capsys, zoo_with_animals):
+    """Tests feeding animals."""
     zoo, old_enc, new_enc, animal = zoo_with_animals
     feed_animals()
     captured = capsys.readouterr()
     assert "Feeding Leo the Lion" in captured.out
 
 def test_move_animal(zoo_with_animals):
+    """Tests moving an animal to a different enclosure."""
     zoo, old_enc, new_enc, animal = zoo_with_animals
     enc_index = zoo.enclosures.index(new_enc) + 1
     with patch("builtins.input", side_effect=["1", str(enc_index), ""]):
@@ -114,6 +125,7 @@ def test_move_animal(zoo_with_animals):
     assert animal not in old_enc.animals
 
 def test_move_animal_blocked_by_treatment(zoo_with_animals):
+    """Tests that an animal under treatment cannot be moved."""
     zoo, old_enc, new_enc, animal = zoo_with_animals
     animal.under_treatment = True
     with patch("builtins.input", side_effect=["1"]):

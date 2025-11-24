@@ -12,7 +12,7 @@ class Enclosure:
     """Enclosures can hold animals of various types."""
     enclosure_list = []
 
-    def __init__(self, size=str, biome=str, zoo=None, name=None):
+    def __init__(self, size: str, biome: str, zoo: "Zoo" = None, name: str = None):
         self.__enclosure_id = self.get_next_id()
         self.__enclosure_name = name if name else "Empty Enclosure"
         self.__enclosure_size = size
@@ -27,55 +27,65 @@ class Enclosure:
 
     @classmethod
     def get_next_id(cls):
-        """Returns the first available enclosure-id that isn't already assigned."""
+        """Get the next available ID for an enclosure so IDs are unique."""
         next_available_id = 1
         while any(next_available_id == enclosure._Enclosure__enclosure_id for enclosure in cls.enclosure_list):
             next_available_id += 1
         return next_available_id
 
-
     @property
-    def enclosure_id(self):
+    def enclosure_id(self) -> int:
+        """Return the unique ID of the enclosure."""
         return self.__enclosure_id
 
     @property
-    def name(self):
+    def name(self) -> str:
+        """Return the name of the enclosure."""
         return self.__enclosure_name
 
     @property
-    def size(self):
+    def size(self) -> str:
+        """Return the size of the enclosure."""
         return self.__enclosure_size
 
     @property
-    def biome(self):
+    def biome(self) -> str:
+        """Return the biome type of the enclosure."""
         return self.__enclosure_biome
 
     @property
-    def cleanliness(self):
+    def cleanliness(self) -> int:
+        """Return the cleanliness rating of the enclosure (1-10)."""
         return self.__enclosure_cleanliness
 
     @property
-    def animals(self):
+    def animals(self) -> list:
+        """Return a list of animals currently in the enclosure."""
         return self.__enclosure_animal
 
     @name.setter
-    def name(self, value):
+    def name(self, value: str):
+        """Set the name of the enclosure."""
         self.__enclosure_name = value
 
     @biome.setter
-    def biome(self, value):
+    def biome(self, value: str):
+        """Set the biome type of the enclosure."""
         self.__enclosure_biome = value
 
     @cleanliness.setter
-    def cleanliness(self, value):
+    def cleanliness(self, value: int):
+        """Set the cleanliness rating, clamped between 1 and 10."""
         self.__enclosure_cleanliness = max(1, min(10, value))
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
+        """Check equality based on name, biome, and size (ignores ID and animals)."""
         if not isinstance(other, Enclosure):
             return False
         return self.name == other.name and self.biome == other.biome and self.size == other.size
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return a readable string representation of the enclosure, including first animal type if present."""
         animal_status = "Empty" if not self.__enclosure_animal else type(self.__enclosure_animal[0]).__name__
         return (
             f"Enclosure # {self.__enclosure_id} | "
@@ -83,7 +93,8 @@ class Enclosure:
             f"Biome: {self.__enclosure_biome} | "
             f"Size: {self.__enclosure_size} | "
             f"Cleanliness: {self.__enclosure_cleanliness} | "
-            f"Animal Type: {animal_status}")
+            f"Animal Type: {animal_status}"
+        )
 
 # EnclosureOps
 def add_enclosure(zoo):
@@ -141,7 +152,7 @@ def add_enclosure(zoo):
 
 
 def remove_enclosure(zoo, enclosure_id):
-    """Removes an enclosure from the list of enclosures."""
+    """Removes an enclosure from the zoo."""
     for enclosure in zoo.enclosures:
         if enclosure.enclosure_id == enclosure_id:
             zoo.enclosures.remove(enclosure)
@@ -151,7 +162,7 @@ def remove_enclosure(zoo, enclosure_id):
 
 
 def list_enclosures(zoo):
-    """Lists all enclosures and their details."""
+    """Lists all zoo enclosures and their details."""
     if not zoo.enclosures:
         print("No enclosures in the zoo.")
     else:
