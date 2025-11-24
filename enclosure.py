@@ -79,7 +79,7 @@ class Enclosure:
         self.__enclosure_cleanliness = max(1, min(10, value))
 
     def __eq__(self, other) -> bool:
-        """Check equality based on name, biome, and size (ignores ID and animals)."""
+        """Check equality based on name, biome, and size. Required for test_add_enclosure_to_zoo"""
         if not isinstance(other, Enclosure):
             return False
         return self.name == other.name and self.biome == other.biome and self.size == other.size

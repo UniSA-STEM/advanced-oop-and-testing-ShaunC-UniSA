@@ -121,7 +121,7 @@ def resolve_health_issue(animal):
 
 def animal_health_report(animal):
     """Print health information for a single animal using HealthRecords."""
-    print(f"\n--- Health Report: {animal.name} ---")
+    print(f"\n=== Health Report: {animal.name} ===")
 
     def print_records(title, records):
         print(f"{title}:")

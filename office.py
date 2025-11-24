@@ -81,7 +81,7 @@ class Zoo:
             return None
 
     def add_animal_to_enclosure(self, animal, enclosure):
-        """Assigns an animal to an enclosure."""
+        """Function used for testing. Assigns an animal to an enclosure."""
         animal.enclosure = enclosure
         enclosure.animals.append(animal)
         self.animals.append(animal)
